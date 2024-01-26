@@ -1,0 +1,11 @@
+﻿@page "/"
+
+<PageTitle>Index</PageTitle>
+
+<MudText Typo="Typo.h3" GutterBottom="true">Bienvenido</MudText>
+
+<MudOverlay @bind-Visible="_errorApi" LightBackground="true" ZIndex="9999" />
+@if (_errorApi)
+{
+    <MudAlert Variant="Variant.Filled" ContentAlignment="HorizontalAlignment.Center" Severity="Severity.Error">No hay sistema</MudAlert>
+}

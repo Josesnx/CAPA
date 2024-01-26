@@ -1,0 +1,61 @@
+﻿@page "/Usuario"
+@using Client.Data
+
+<MudTable UserAttributes="@(new Dictionary<string, object> {{"id","tblUsuarios"}})" ServerData="@(new Func<TableState, Task<TableData<UsuarioViewModel>>>(GetUsuarioAsync))"
+          Bordered="true"
+          Dense="true" Hover="true" ReadOnly="true" SortLabel="Ordenar por" Elevation="4" @ref="_usuarioTable">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Usuarios</MudText>
+        <MudIconButton UserAttributes="@(new Dictionary<string, object> {{"id","btnNew"}})" Icon="@Icons.Material.Outlined.AddCircleOutline" Size="Size.Medium"
+                       @onclick="NavigateToAddUsuarioPage" Color="Color.Primary"></MudIconButton>
+        <MudCheckBox @bind-Value="@_checkbox" Color="Color.Warning" CheckedIcon="@Icons.Material.Filled.RemoveRedEye" UncheckedIcon="@Icons.Material.Outlined.RemoveRedEye"></MudCheckBox>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>Editar</MudTh>
+        <MudTh>Nombre</MudTh>
+        <MudTh>CURP</MudTh>
+        <MudTh>RFC</MudTh>
+        @if (_checkbox)
+        {
+            <MudTh>Teléfono</MudTh>
+            <MudTh>Teléfono Fijo</MudTh>
+            <MudTh>Correo</MudTh>
+        }        
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Editar" Style="text-align: center">
+            <MudIconButton UserAttributes="@(new Dictionary<string, object> {{"id","btnEdit"}})" Icon="@Icons.Material.Filled.Edit" Color="Color.Primary"
+                           @onclick="()=> NavigateToEditUsuarioPage(context)" Size="Size.Medium"></MudIconButton>
+        </MudTd>
+        <MudTd DataLabel="Nombre">
+            @context.Nombre @context.ApellidoPaterno @context.ApellidoMaterno
+        </MudTd>
+        <MudTd DataLabel="CURP">
+            @context.Curp
+        </MudTd>
+        <MudTd DataLabel="RFC">
+            @context.Rfc
+        </MudTd>
+        @if (_checkbox)
+        {
+            <MudTd DataLabel="Telefono">
+                @context.Telefono
+            </MudTd>
+            <MudTd DataLabel="TelefonoFijo">
+                @context.TelefonoFijo
+            </MudTd>
+            <MudTd DataLabel="Correo">
+                @context.Correo
+            </MudTd>
+        }
+    </RowTemplate>
+    <NoRecordsContent>
+        <MudText>No se encontraron registros</MudText>
+    </NoRecordsContent>
+    <LoadingContent>
+        <MudText>Cargando...</MudText>
+    </LoadingContent>
+    <PagerContent>
+        <MudTablePager PageSizeOptions="_pageSizeOptions" RowsPerPageString="Resultados por página" InfoFormat="@_infoFormat" />
+    </PagerContent>
+</MudTable>
