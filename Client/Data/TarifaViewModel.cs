@@ -9,4 +9,6 @@ public class TarifaViewModel
     public string? Anio { get; set; }
 
     public decimal Precio { get; set; }
+
+    public short Estatus { get; set; }
 }

@@ -31,13 +31,11 @@ public partial class CuentaList : ComponentBase
     {
         try
         {
-            ApiResponseViewModel apiResponse = await Http!.GetFromJsonAsync<ApiResponseViewModel>(_url + "CUENTA") ?? new();
-            _cuenta = apiResponse.Items
-                .Select(item => item is JsonElement jsonElement ? JsonSerializer.Deserialize<CuentaViewModel>(jsonElement.GetRawText()) : null)
-                .Where(cuenta => cuenta != null).ToList()!;
-            _usuario = apiResponse.Items
-                .Select(item => item is JsonElement jsonElement ? JsonSerializer.Deserialize<UsuarioViewModel>(jsonElement.GetRawText()) : null)
-                .Where(usuario => usuario != null).ToList()!;
+            ApiResponseViewModel<CuentaViewModel> apiResponse = await Http!.GetFromJsonAsync<ApiResponseViewModel<CuentaViewModel>>(_url + "CUENTA") ?? new();
+            _cuenta = apiResponse.Items;
+            //_usuario = apiResponse.Items
+            //    .Select(item => item is JsonElement jsonElement ? JsonSerializer.Deserialize<UsuarioViewModel>(jsonElement.GetRawText()) : null)
+            //    .Where(usuario => usuario != null).ToList()!;
             return new TableData<CuentaViewModel>
             {
                 Items = _cuenta,

@@ -4,9 +4,8 @@ namespace Client.Data;
 
 public class EstadoViewModel
 {
-    [JsonPropertyName("idestado")]
     public int IdEstado { get; set; }
 
-    [JsonPropertyName("nombre")]
+    [JsonPropertyName("nombreestado")]
     public string? Nombre { get; set; }
 }

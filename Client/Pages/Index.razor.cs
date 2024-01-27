@@ -1,4 +1,5 @@
-﻿using Client.Data.Herramienta;
+﻿using Client.Data;
+using Client.Data.Herramienta;
 using Microsoft.AspNetCore.Components;
 
 namespace Client.Pages;
@@ -14,7 +15,7 @@ public partial class Index : ComponentBase
     {
         try
         {
-            ApiResponseViewModel apiResponse = await Http!.GetFromJsonAsync<ApiResponseViewModel>("https://apex.oracle.com/pls/apex/capa/SFA/USUARIOS") ?? new();
+            ApiResponseViewModel<UsuarioViewModel> apiResponse = await Http!.GetFromJsonAsync<ApiResponseViewModel<UsuarioViewModel>>("https://apex.oracle.com/pls/apex/capa/SFA/USUARIOS") ?? new();
         }
         catch (HttpRequestException ex)
         {

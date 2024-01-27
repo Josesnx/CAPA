@@ -1,11 +1,14 @@
-﻿using System.Text.Json.Serialization;
-
-namespace Client.Data;
+﻿namespace Client.Data;
 
 public class DireccionViewModel
 {
-    [JsonPropertyName("iddireccion")]
     public int IdDireccion { get; set; }
+
+    public int IdUsuario { get; set; }
+
+    public int IdColonia { get; set; }
+
+    public int IdTipoVialidad { get; set; }
 
     public UsuarioViewModel Usuario { get; set; }
 
@@ -13,18 +16,13 @@ public class DireccionViewModel
 
     public TipoVialidadViewModel TipoVialidad { get; set; }
 
-    [JsonPropertyName("calle")]
     public string? Calle { get; set; }
 
-    [JsonPropertyName("numerointerior")]
     public string? NumeroInterior { get; set; }
 
-    [JsonPropertyName("numeroexterior")]
     public string? NumeroExterior { get; set; }
 
-    [JsonPropertyName("calle1")]
     public string? Calle1 { get; set; }
 
-    [JsonPropertyName("calle2")]
     public string? Calle2 { get; set; }
 }

@@ -1,8 +1,7 @@
-﻿using Client.Data.Herramienta;
-using Client.Data;
+﻿using Client.Data;
+using Client.Data.Herramienta;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using System.Text.Json;
 
 namespace Client.Pages.Usuario;
 
@@ -30,27 +29,37 @@ public partial class UsuarioEdit : ComponentBase
 
     protected override async Task OnInitializedAsync()
     {
-        ApiResponseViewModel apiResponse = await Http!.GetFromJsonAsync<ApiResponseViewModel>(_url + $"USUARIOS?IdUsuario={IdUsuario}") ?? new();
-        _model = apiResponse.Items?.OfType<JsonElement>().Select(item => JsonSerializer.Deserialize<UsuarioViewModel>(item.GetRawText())).FirstOrDefault() ?? new UsuarioViewModel();
-        _modelDireccion = apiResponse.Items?.OfType<JsonElement>().Select(item => JsonSerializer.Deserialize<DireccionViewModel>(item.GetRawText())).FirstOrDefault() ?? new DireccionViewModel();
-        _modelDireccion.Colonia.Municipio.Estado = new EstadoViewModel();
-        _modelDireccion.Colonia.Municipio.Estado = apiResponse.Items?.OfType<JsonElement>().Select(item => JsonSerializer.Deserialize<EstadoViewModel>(item.GetRawText())).FirstOrDefault() ?? new EstadoViewModel();
-        _modelDireccion.Colonia.Municipio = new MunicipioViewModel();
-        _modelDireccion.Colonia.Municipio = apiResponse.Items?.OfType<JsonElement>().Select(item => JsonSerializer.Deserialize<MunicipioViewModel>(item.GetRawText())).FirstOrDefault() ?? new MunicipioViewModel();
-        _modelDireccion.Colonia = new ColoniaViewModel();
-        _modelDireccion.Colonia = apiResponse.Items?.OfType<JsonElement>().Select(item => JsonSerializer.Deserialize<ColoniaViewModel>(item.GetRawText())).FirstOrDefault() ?? new ColoniaViewModel();
         _modelDireccion.TipoVialidad = new TipoVialidadViewModel();
-        _modelDireccion.TipoVialidad = apiResponse.Items?.OfType<JsonElement>().Select(item => JsonSerializer.Deserialize<TipoVialidadViewModel>(item.GetRawText())).FirstOrDefault() ?? new TipoVialidadViewModel();
+        _modelDireccion.Colonia = new ColoniaViewModel
+        {
+            Municipio = new MunicipioViewModel()
+            {
+                Estado = new EstadoViewModel()
+            }
+        };
 
-        ApiResponseViewModel apiResponseE = await Http!.GetFromJsonAsync<ApiResponseViewModel>(_url + "CAT_E") ?? new();
-        _listEstado = apiResponseE.Items
-                .Select(item => item is JsonElement jsonElement ? JsonSerializer.Deserialize<EstadoViewModel>(jsonElement.GetRawText()) : null)
-                .Where(estado => estado != null).ToList()!;
+        ApiResponseViewModel<UsuarioViewModel> apiResponseU = await Http!.GetFromJsonAsync<ApiResponseViewModel<UsuarioViewModel>>(_url + $"USUARIOS?IdUsuario={IdUsuario}") ?? new();
+        _model = apiResponseU.Items.FirstOrDefault()!;
+        ApiResponseViewModel<DireccionViewModel> apiResponseD = await Http!.GetFromJsonAsync<ApiResponseViewModel<DireccionViewModel>>(_url + $"USUARIOS?IdUsuario={IdUsuario}") ?? new();
+        _modelDireccion = apiResponseD.Items.FirstOrDefault()!;
+        ApiResponseViewModel<TipoVialidadViewModel> apiResponseT = await Http!.GetFromJsonAsync<ApiResponseViewModel<TipoVialidadViewModel>>(_url + $"USUARIOS?IdUsuario={IdUsuario}") ?? new();
+        _modelDireccion.TipoVialidad = apiResponseT.Items.FirstOrDefault()!;
+        ApiResponseViewModel<ColoniaViewModel> apiResponseC = await Http!.GetFromJsonAsync<ApiResponseViewModel<ColoniaViewModel>>(_url + $"USUARIOS?IdUsuario={IdUsuario}") ?? new();
+        _modelDireccion.Colonia = apiResponseC.Items.FirstOrDefault()!;
+        ApiResponseViewModel<MunicipioViewModel> apiResponseM = await Http!.GetFromJsonAsync<ApiResponseViewModel<MunicipioViewModel>>(_url + $"USUARIOS?IdUsuario={IdUsuario}") ?? new();
+        _modelDireccion.Colonia.Municipio = apiResponseM.Items.FirstOrDefault()!;
+        ApiResponseViewModel<EstadoViewModel> apiResponseEs = await Http!.GetFromJsonAsync<ApiResponseViewModel<EstadoViewModel>>(_url + $"USUARIOS?IdUsuario={IdUsuario}") ?? new();
+        _modelDireccion.Colonia.Municipio.Estado = apiResponseEs.Items.FirstOrDefault()!;
 
-        ApiResponseViewModel apiResponseTv = await Http!.GetFromJsonAsync<ApiResponseViewModel>(_url + "CAT_TV") ?? new();
-        _listVialidad = apiResponseTv.Items
-                .Select(item => item is JsonElement jsonElement ? JsonSerializer.Deserialize<TipoVialidadViewModel>(jsonElement.GetRawText()) : null)
-                .Where(vialidad => vialidad != null).ToList()!;
+        await GetMunicipioXEstado();
+
+        await GetColoniaXMunicipio();
+
+        ApiResponseViewModel<EstadoViewModel> apiResponseE = await Http!.GetFromJsonAsync<ApiResponseViewModel<EstadoViewModel>>(_url + "CAT_E") ?? new();
+        _listEstado = apiResponseE.Items;
+
+        ApiResponseViewModel<TipoVialidadViewModel> apiResponseTv = await Http!.GetFromJsonAsync<ApiResponseViewModel<TipoVialidadViewModel>>(_url + "CAT_TV") ?? new();
+        _listVialidad = apiResponseTv.Items;
     }
 
     private void NavigateToUsuarioPage()
@@ -94,17 +103,13 @@ public partial class UsuarioEdit : ComponentBase
 
     protected async Task GetMunicipioXEstado()
     {
-        ApiResponseViewModel apiResponse = await Http!.GetFromJsonAsync<ApiResponseViewModel>(_url + $"CAT_M?IdEstado={_modelDireccion.Colonia.Municipio.Estado.IdEstado}") ?? new();
-        _listMunicipio = apiResponse.Items
-                .Select(item => item is JsonElement jsonElement ? JsonSerializer.Deserialize<MunicipioViewModel>(jsonElement.GetRawText()) : null)
-                .Where(estado => estado != null).ToList()!;
+        ApiResponseViewModel<MunicipioViewModel> apiResponse = await Http!.GetFromJsonAsync<ApiResponseViewModel<MunicipioViewModel>>(_url + $"CAT_M?IdEstado={_modelDireccion.Colonia.Municipio.Estado.IdEstado}") ?? new();
+        _listMunicipio = apiResponse.Items;
     }
 
     protected async Task GetColoniaXMunicipio()
     {
-        ApiResponseViewModel apiResponse = await Http!.GetFromJsonAsync<ApiResponseViewModel>(_url + $"CAT_C?IdMunicipio={_modelDireccion.Colonia.Municipio.IdMunicipio}") ?? new();
-        _listColonia = apiResponse.Items
-                .Select(item => item is JsonElement jsonElement ? JsonSerializer.Deserialize<ColoniaViewModel>(jsonElement.GetRawText()) : null)
-                .Where(colonia => colonia != null).ToList()!;
+        ApiResponseViewModel<ColoniaViewModel> apiResponse = await Http!.GetFromJsonAsync<ApiResponseViewModel<ColoniaViewModel>>(_url + $"CAT_C?IdMunicipio={_modelDireccion.Colonia.Municipio.IdMunicipio}") ?? new();
+        _listColonia = apiResponse.Items;
     }
 }

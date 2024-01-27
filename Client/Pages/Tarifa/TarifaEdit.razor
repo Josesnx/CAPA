@@ -1,0 +1,37 @@
+﻿@page "/Tarifa/Edit/{IdTarifa:int}"
+@attribute [Authorize]
+
+<MudCard Elevation="4">
+    <EditForm Model="@_model" OnValidSubmit="EditTarifaAsync">
+        <FluentValidationValidator />
+        <MudCard>
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h5">Editar tarifa</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudItem xs="12" sm="6">
+                <MudCard>
+                    <MudCardContent>
+                        <MudTextField Label="Tipo" HelperText="Requerido"
+                                      @bind-Value="_model.Tipo" For="@(() => _model.Tipo)" />
+                        <MudNumericField Label="Año" Class="mt-3" HelperText="Requerido"
+                                         @bind-Value="_model.Anio" For="@(() => _model.Anio)" Format="N0" />
+                        <MudNumericField Label="Precio" Class="mt-3" HelperText="Requerido"
+                                         @bind-Value="_model.Precio" For="@(() => _model.Precio)" Format="N2" />
+                        <MudSelect T="short" Label="Estatus" AnchorOrigin="Origin.TopCenter"
+                                         @bind-Value="_model.Estatus" For="@(() => _model.Estatus)">
+                                     <MudSelectItem Value="@((short)1)">Activo</MudSelectItem>
+                                     <MudSelectItem Value="@((short)0)">Inactivo</MudSelectItem>
+                                     </MudSelect>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+            <MudCardActions>
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Actualizar</MudButton>
+                <MudButton Class="ma-2" UserAttributes="@(new Dictionary<string, object> {{"id","btnCancel"}})"
+                           Variant="Variant.Filled" @onclick="NavigateToTarifaPage" Color="Color.Error">Cancelar</MudButton>
+            </MudCardActions>
+        </MudCard>
+    </EditForm>
+</MudCard>

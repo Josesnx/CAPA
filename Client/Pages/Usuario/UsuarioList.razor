@@ -1,7 +1,7 @@
 ﻿@page "/Usuario"
 @using Client.Data
 
-<MudTable UserAttributes="@(new Dictionary<string, object> {{"id","tblUsuarios"}})" ServerData="@(new Func<TableState, Task<TableData<UsuarioViewModel>>>(GetUsuarioAsync))"
+<MudTable UserAttributes="@(new Dictionary<string, object> {{"id","tblUsuarios"}})" ServerData="@(new Func<TableState, Task<TableData<DireccionViewModel>>>(GetUsuarioAsync))"
           Bordered="true"
           Dense="true" Hover="true" ReadOnly="true" SortLabel="Ordenar por" Elevation="4" @ref="_usuarioTable">
     <ToolBarContent>
@@ -15,10 +15,14 @@
         <MudTh>Nombre</MudTh>
         <MudTh>CURP</MudTh>
         <MudTh>RFC</MudTh>
+        <MudTh>Calle</MudTh>
+        <MudTh>Entre calles</MudTh>
         @if (_checkbox)
         {
-            <MudTh>Teléfono</MudTh>
-            <MudTh>Teléfono Fijo</MudTh>
+            <MudTh>Teléfonos</MudTh>
+            <MudTh>Colonia</MudTh>
+            <MudTh>Municipio</MudTh>
+            <MudTh>Estado</MudTh>
             <MudTh>Correo</MudTh>
         }        
     </HeaderContent>
@@ -28,24 +32,37 @@
                            @onclick="()=> NavigateToEditUsuarioPage(context)" Size="Size.Medium"></MudIconButton>
         </MudTd>
         <MudTd DataLabel="Nombre">
-            @context.Nombre @context.ApellidoPaterno @context.ApellidoMaterno
+            @context.Usuario.Nombre @context.Usuario.ApellidoPaterno @context.Usuario.ApellidoMaterno
         </MudTd>
         <MudTd DataLabel="CURP">
-            @context.Curp
+            @context.Usuario.Curp
         </MudTd>
         <MudTd DataLabel="RFC">
-            @context.Rfc
+            @context.Usuario.Rfc
+        </MudTd>
+        <MudTd DataLabel="Calle">
+            @context.Calle INT: @context.NumeroInterior EXT: @context.NumeroExterior
+        </MudTd>
+        <MudTd DataLabel="Entre calles">
+            @context.Calle1 y @context.Calle2
         </MudTd>
         @if (_checkbox)
         {
-            <MudTd DataLabel="Telefono">
-                @context.Telefono
+            <MudTd DataLabel="Telefonos">
+                Teléfono: @context.Usuario.Telefono
+                Teléfono Fijo: @context.Usuario.TelefonoFijo
             </MudTd>
-            <MudTd DataLabel="TelefonoFijo">
-                @context.TelefonoFijo
+            <MudTd DataLabel="Colonia">
+                @context.Colonia.Nombre
+            </MudTd>
+            <MudTd DataLabel="Municipio">
+                @context.Colonia.Municipio.Nombre
+            </MudTd>
+            <MudTd DataLabel="Estado">
+                @context.Colonia.Municipio.Estado.Nombre
             </MudTd>
             <MudTd DataLabel="Correo">
-                @context.Correo
+                @context.Usuario.Correo
             </MudTd>
         }
     </RowTemplate>

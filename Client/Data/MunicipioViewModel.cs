@@ -4,11 +4,12 @@ namespace Client.Data;
 
 public class MunicipioViewModel
 {
-    [JsonPropertyName("idmunicipio")]
     public int IdMunicipio { get; set; }
+
+    public int IdEstado { get; set; }
 
     public EstadoViewModel Estado { get; set; }
 
-    [JsonPropertyName("nombre")]
+    [JsonPropertyName("nombremunicipio")]
     public string? Nombre { get; set; }
 }
