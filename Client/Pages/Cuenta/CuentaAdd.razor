@@ -1,0 +1,65 @@
+﻿@page "/Cuenta/Add"
+@attribute [Authorize]
+@using Client.Data
+
+<MudCard Elevation="4">
+    <EditForm Model="@_expediente" OnValidSubmit="SaveCuentaAsync">
+        <FluentValidationValidator />
+        <MudCard>
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h5">Agregar Cuenta</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudStack Row="true">
+                <MudItem xs="12" sm="6">
+                    <MudCard>
+                        <MudCardContent>
+                            <MudAutocomplete T="UsuarioViewModel" Label="Usuarios" @bind-Value="_expediente.Usuario"
+                                       SearchFunc="@SearchUsuarios" ToStringFunc="@(e => e == null ? null : e.NombreCompleto)"
+                                             For="@(() => _expediente.Usuario)"
+                                             Strict="false" CoerceValue="true" ResetValueOnEmptyText="true" />
+                            <MudSelect T="int" AnchorOrigin="Origin.BottomCenter"
+                                       @bind-Value="_expediente.TipoToma.IdTipoToma" For="@(() => _expediente.TipoToma.IdTipoToma)"
+                                       HelperText="Requerido">
+                                <MudSelectItem Value="0" Disabled="true">Tipo Toma</MudSelectItem>
+                                @foreach (var toma in _listTipoToma)
+                                {
+                                    <MudSelectItem Value="@toma.IdTipoToma">@toma.Toma</MudSelectItem>
+                                }
+                            </MudSelect>
+                            <MudSelect T="int" AnchorOrigin="Origin.BottomCenter"
+                                       @bind-Value="_expediente.Cuenta.Tarifa.IdTarifa" For="@(() => _expediente.Cuenta.Tarifa.IdTarifa)"
+                                       HelperText="Requerido">
+                                <MudSelectItem Value="0" Disabled="true">Tarifa</MudSelectItem>
+                                @foreach (var tarifa in _listTarifa)
+                                {
+                                    <MudSelectItem Value="@tarifa.IdTarifa">@tarifa.Tipo</MudSelectItem>
+                                }
+                            </MudSelect>
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudCard>
+                        <MudCardContent>
+                            <MudTextField Label="Contrato" HelperText="Requerido"
+                                          @bind-Value="_expediente.Contrato" For="@(() => _expediente.Contrato)" />
+                            <MudTextField Label="Tarjeta" HelperText="Requerido" Class="mt-3"
+                                          @bind-Value="_expediente.Tarjeta" For="@(() => _expediente.Tarjeta)" />
+                            <MudTextField Label="No. Solicitud" HelperText="Requerido" Class="mt-3"
+                                          @bind-Value="_expediente.NoSolicitud" For="@(() => _expediente.NoSolicitud)" />
+                            <MudNumericField Label="Total" Class="mt-3" HelperText="Requerido"
+                                             @bind-Value="_expediente.Cuenta.Total" For="@(() => _expediente.Cuenta.Total)" Format="N2" />
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+            </MudStack>
+            <MudCardActions>
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Agregar</MudButton>
+                <MudButton Class="ma-2" UserAttributes="@(new Dictionary<string, object> {{"id","btnCancel"}})"
+                           Variant="Variant.Filled" @onclick="NavigateToCuentaPage" Color="Color.Error">Cancelar</MudButton>
+            </MudCardActions>
+        </MudCard>
+    </EditForm>
+</MudCard>

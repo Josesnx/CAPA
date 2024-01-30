@@ -1,4 +1,6 @@
-﻿namespace Client.Data;
+﻿using System.Text.Json.Serialization;
+
+namespace Client.Data;
 
 public class TarifaViewModel
 {
@@ -6,6 +8,7 @@ public class TarifaViewModel
 
     public string? Tipo { get; set; }
 
+    [JsonPropertyName("añotarifa")]
     public string? Anio { get; set; }
 
     public decimal Precio { get; set; }

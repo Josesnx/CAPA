@@ -1,1 +1,61 @@
 ﻿@page "/Cuenta"
+@using Client.Data
+
+<MudTable UserAttributes="@(new Dictionary<string, object> {{"id","tblCuentas"}})" ServerData="@(new Func<TableState, Task<TableData<ExpedienteViewModel>>>(GetCuentaAsync))"
+          Bordered="true"
+          Dense="true" Hover="true" ReadOnly="true" SortLabel="Ordenar por" Elevation="4" @ref="_cuentaTable">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Cuentas</MudText>
+        <MudIconButton UserAttributes="@(new Dictionary<string, object> {{"id","btnNew"}})" Icon="@Icons.Material.Outlined.AddCircleOutline" Size="Size.Medium"
+                       @onclick="NavigateToAddCuentaPage" Color="Color.Primary"></MudIconButton>
+        <MudCheckBox @bind-Value="@_checkbox" Color="Color.Warning" CheckedIcon="@Icons.Material.Filled.RemoveRedEye" UncheckedIcon="@Icons.Material.Outlined.RemoveRedEye"></MudCheckBox>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>Nombre</MudTh>
+        <MudTh>Total</MudTh>
+        <MudTh>Estatus</MudTh>
+        @if (_checkbox)
+        {
+            <MudTh>Tipo Toma</MudTh>
+            <MudTh>Tarifa</MudTh>
+        }
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Nombre">
+            @context.Usuario.Nombre @context.Usuario.ApellidoPaterno @context.Usuario.ApellidoMaterno
+        </MudTd>
+        <MudTd DataLabel="Total">
+            @context.Cuenta.Total
+        </MudTd>
+        <MudTd DataLabel="Estatus">
+            @context.Cuenta.EstatusString
+        </MudTd>
+        @if (_checkbox)
+        {
+            <MudTd DataLabel="Tipo Toma">
+                @context.TipoToma.Toma
+                No: @context.TipoToma.NoToma
+            </MudTd>
+            <MudTd DataLabel="Tarifa">
+                Tipo: @context.Cuenta.Tarifa.Tipo
+                Año: @context.Cuenta.Tarifa.Anio
+                Precio: $@context.Cuenta.Tarifa.Precio
+            </MudTd>
+        }
+        <MudTd DataLabel="Expediente/Cuenta" Style="text-align: center">
+            <MudIconButton UserAttributes="@(new Dictionary<string, object> {{"id","btnExpediente"}})" Icon="@Icons.Material.Filled.Folder" Color="Color.Primary"
+                           @onclick="()=> NavigateToExpedientePage(context)" Size="Size.Medium"></MudIconButton>
+            <MudIconButton UserAttributes="@(new Dictionary<string, object> {{"id","btnEstadoCuenta"}})" Icon="@Icons.Material.Filled.AccountBalanceWallet" Color="Color.Primary"
+                           @onclick="()=> NavigateToEstadoCuentaPage(context)" Size="Size.Medium"></MudIconButton>
+        </MudTd>
+    </RowTemplate>
+    <NoRecordsContent>
+        <MudText>No se encontraron registros</MudText>
+    </NoRecordsContent>
+    <LoadingContent>
+        <MudText>Cargando...</MudText>
+    </LoadingContent>
+    <PagerContent>
+        <MudTablePager PageSizeOptions="_pageSizeOptions" RowsPerPageString="Resultados por página" InfoFormat="@_infoFormat" />
+    </PagerContent>
+</MudTable>

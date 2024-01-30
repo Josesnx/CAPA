@@ -4,9 +4,15 @@ public class ExpedienteViewModel
 {
     public int IdExpediente { get; set; }
 
+    public int IdUsuario { get; set; }
+
+    public int IdCuenta { get; set; }
+
+    public int IdTipoToma { get; set; }
+
     public UsuarioViewModel Usuario { get; set; }
 
-    public ReciboViewModel Recibo { get; set; }
+    public CuentaViewModel Cuenta { get; set; }
 
     public TipoTomaViewModel TipoToma { get; set; }
 

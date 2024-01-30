@@ -19,4 +19,12 @@ public class UsuarioViewModel
     public string? TelefonoFijo { get; set; }
 
     public string? Correo { get; set; }
+
+    public string? NombreCompleto
+    {
+        get
+        {
+            return $"{Nombre} {ApellidoPaterno} {ApellidoMaterno}".Trim();
+        }
+    }
 }

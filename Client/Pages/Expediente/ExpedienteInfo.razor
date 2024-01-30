@@ -1,0 +1,40 @@
+﻿@page "/Expediente/{IdExpediente:int}"
+@attribute [Authorize]
+
+<MudCard Elevation="4">
+    <EditForm Model="@_model" OnValidSubmit="EditExpedienteAsync">
+        <FluentValidationValidator />
+        <MudCard>
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h5">Expediente de @_model.Usuario.NombreCompleto</MudText>
+                </CardHeaderContent>
+                <CardHeaderActions>
+                        <MudCheckBox @bind-Value="@_edit" Color="Color.Warning" CheckedIcon="@Icons.Material.Filled.DriveFileRenameOutline" UncheckedIcon="@Icons.Material.Outlined.DriveFileRenameOutline"></MudCheckBox>
+                </CardHeaderActions>
+            </MudCardHeader>
+            <MudCard>
+                <MudCardContent>
+                    <MudTextField Label="Contrato" HelperText="Requerido"
+                                  @bind-Value="_model.Contrato" For="@(() => _model.Contrato)" Disabled="!_edit"/>
+                    <MudTextField Label="Tarjeta" HelperText="Requerido" Class="mt-3"
+                                  @bind-Value="_model.Tarjeta" For="@(() => _model.Tarjeta)" Disabled="!_edit"/>
+                    <MudTextField Label="No. Solicitud" HelperText="Requerido" Class="mt-3"
+                                  @bind-Value="_model.NoSolicitud" For="@(() => _model.NoSolicitud)" Disabled="!_edit"/>
+                    <MudTextField Label="Toma" HelperText="Requerido" Class="mt-3"
+                                  @bind-Value="_model.TipoToma.Toma" For="@(() => _model.TipoToma.Toma)" Disabled="!_edit"/>
+                    <MudTextField Label="No. de Toma" HelperText="Requerido" Class="mt-3"
+                                  @bind-Value="_model.TipoToma.NoToma" For="@(() => _model.TipoToma.NoToma)" Disabled="!_edit"/>
+                </MudCardContent>
+            </MudCard>
+            @if (_edit)
+            {
+                <MudCardActions>
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Actualizar</MudButton>
+                    <MudButton Class="ma-2" UserAttributes="@(new Dictionary<string, object> {{"id","btnCancel"}})"
+                               Variant="Variant.Filled" @onclick="NavigateToCuentaPage" Color="Color.Error">Cancelar</MudButton>
+                </MudCardActions>
+            }
+        </MudCard>
+    </EditForm>
+</MudCard>
