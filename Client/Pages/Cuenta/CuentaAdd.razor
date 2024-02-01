@@ -15,6 +15,7 @@
                 <MudItem xs="12" sm="6">
                     <MudCard>
                         <MudCardContent>
+                            <MudText Typo="Typo.subtitle1">Cuenta</MudText>
                             <MudAutocomplete T="UsuarioViewModel" Label="Usuarios" @bind-Value="_expediente.Usuario"
                                        SearchFunc="@SearchUsuarios" ToStringFunc="@(e => e == null ? null : e.NombreCompleto)"
                                              For="@(() => _expediente.Usuario)"
@@ -43,12 +44,26 @@
                 <MudItem xs="12" sm="6">
                     <MudCard>
                         <MudCardContent>
+                            <MudText Typo="Typo.subtitle1">Expediente</MudText>
                             <MudTextField Label="Contrato" HelperText="Requerido"
                                           @bind-Value="_expediente.Contrato" For="@(() => _expediente.Contrato)" />
                             <MudTextField Label="Tarjeta" HelperText="Requerido" Class="mt-3"
                                           @bind-Value="_expediente.Tarjeta" For="@(() => _expediente.Tarjeta)" />
                             <MudTextField Label="No. Solicitud" HelperText="Requerido" Class="mt-3"
                                           @bind-Value="_expediente.NoSolicitud" For="@(() => _expediente.NoSolicitud)" />
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudCard>
+                        <MudCardContent>
+                            <MudText Typo="Typo.subtitle1">Estado de Cuenta</MudText>
+                            <MudNumericField Label="Año" Class="mt-3" HelperText="Requerido"
+                                             @bind-Value="_expediente.Cuenta.EstadoCuenta.Anio" For="@(() => _expediente.Cuenta.EstadoCuenta.Anio)" Format="N0" />
+                            <MudNumericField Label="Meses" Class="mt-3" HelperText="Requerido"
+                                             @bind-Value="_expediente.Cuenta.EstadoCuenta.Meses" For="@(() => _expediente.Cuenta.EstadoCuenta.Meses)" Format="N0" />
+                            <MudNumericField Label="Total de Meses" Class="mt-3" HelperText="Requerido"
+                                             @bind-Value="_expediente.Cuenta.EstadoCuenta.TotalMeses" For="@(() => _expediente.Cuenta.EstadoCuenta.TotalMeses)" Format="N0" />
                             <MudNumericField Label="Total" Class="mt-3" HelperText="Requerido"
                                              @bind-Value="_expediente.Cuenta.Total" For="@(() => _expediente.Cuenta.Total)" Format="N2" />
                         </MudCardContent>

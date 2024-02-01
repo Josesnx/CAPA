@@ -3,9 +3,9 @@ using Client.Data.Herramienta;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
-namespace Client.Pages.Cuenta;
+namespace Client.Pages.Recibo;
 
-public partial class CuentaAdd : ComponentBase
+public partial class PagoAdd : ComponentBase
 {
     [Inject]
     HttpClient? Http { get; set; }
@@ -17,57 +17,45 @@ public partial class CuentaAdd : ComponentBase
     public ISnackbar SnackBar { get; set; } = null!;
 
     private readonly string _url = "https://apex.oracle.com/pls/apex/capa/SFA/";
-    private readonly ExpedienteViewModel _expediente = new();
-    private UsuarioViewModel _usuario = new();
+    private readonly ReciboViewModel _model = new();
+    private TarifaViewModel _tarifa = new();
     private List<UsuarioViewModel> _listUsuario = new();
-    private List<TipoTomaViewModel> _listTipoToma = new();
     private List<TarifaViewModel> _listTarifa = new();
-    private bool _nuevaCuenta;
+    private DateTime? _fecha = DateTime.Now;
 
     protected override async Task OnInitializedAsync()
     {
-        _expediente.TipoToma = new TipoTomaViewModel();
-        _expediente.Usuario = new UsuarioViewModel();
-        _expediente.Cuenta = new CuentaViewModel() 
+        _model.Cuenta = new CuentaViewModel()
         {
-            Tarifa = new TarifaViewModel(),
-            EstadoCuenta = new EstadoCuentaViewModel()
+            Usuario = new UsuarioViewModel(),
+            Tarifa = new TarifaViewModel()
         };
 
         var apiResponseU = await Http!.GetFromJsonAsync<ApiResponseViewModel<UsuarioViewModel>>(_url + "USUARIOS") ?? new();
         _listUsuario = apiResponseU.Items;
-        var apiResponseTt = await Http!.GetFromJsonAsync<ApiResponseViewModel<TipoTomaViewModel>>(_url + "TIPO_TOMA") ?? new();
-        _listTipoToma = apiResponseTt.Items;
         var apiResponseT = await Http!.GetFromJsonAsync<ApiResponseViewModel<TarifaViewModel>>(_url + "TARIFA") ?? new();
         _listTarifa = apiResponseT.Items;
     }
 
-    private void NavigateToCuentaPage()
+    protected async Task SavePagoAsync()
     {
-        Navigator.NavigateTo("/Cuenta");
-    }
-
-    protected async Task SaveCuentaAsync()
-    {
-        var parametroCuenta = new Dictionary<string, object?>
+        _model.Fecha = _fecha!.Value;
+        var parametroPago = new Dictionary<string, object?>
         {
-            { "IdUsuario", _expediente.Usuario.IdUsuario },
-            { "IdTipoToma", _expediente.TipoToma.IdTipoToma},
-            { "IdTarifa", _expediente.Cuenta.Tarifa.IdTarifa},
-            { "Contrato", _expediente.Contrato },
-            { "Tarjeta", _expediente.Tarjeta },
-            { "NoSolicitud", _expediente.NoSolicitud }
+            { "Nombre", _model.Cuenta.IdCuenta },
+            { "Nombre", _model.NoRecibo },
+            { "ApellidoPaterno", _model.Fecha },
+            { "ApellidoMaterno", _model.Cantidad }
         };
 
-        var response = await Http!.PostAsJsonAsync(Tool.GenerateQueryString(parametroCuenta!, _url + "CUENTA"), _expediente) ?? new();
+        var response = await Http!.PostAsJsonAsync(Tool.GenerateQueryString(parametroPago!, _url + "RECIBO"), _model) ?? new();
 
         if (response.IsSuccessStatusCode)
         {
-            SnackBar.Add("Agregado exitosamente", Severity.Success);
-            Navigator.NavigateTo("/Cuenta");
+            SnackBar.Add("Registrado exitosamente", Severity.Success);
             return;
         }
-        SnackBar.Add("Ocurrió un error al agregar el registro", Severity.Error);
+        SnackBar.Add("Ocurrió un error al realizar el pago", Severity.Error);
     }
 
     private async Task<IEnumerable<UsuarioViewModel>> SearchUsuarios(string valor)
@@ -88,5 +76,13 @@ public partial class CuentaAdd : ComponentBase
             var isNull = _listUsuario.Where(u => u.NombreCompleto!.Contains(valor, StringComparison.InvariantCultureIgnoreCase));
             return isNull.Any() ? isNull : _listUsuario;
         }
+    }
+
+    private async Task CalcularCantidad()
+    {
+        var apiResponseT = await Http!.GetFromJsonAsync<ApiResponseViewModel<TarifaViewModel>>(_url + $"TARIFA?IdTarifa={_model.Cuenta.Tarifa.IdTarifa}") ?? new();
+        _tarifa = apiResponseT.Items.FirstOrDefault()!;
+
+        _model.Cantidad = _tarifa.Precio;
     }
 }

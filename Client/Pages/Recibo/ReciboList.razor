@@ -1,0 +1,46 @@
+﻿@page "/Recibo/{IdCuenta:int}"
+@using Client.Data
+@attribute [Authorize]
+
+<MudTable UserAttributes="@(new Dictionary<string, object> {{"id","tblRecibos"}})" ServerData="@(new Func<TableState, Task<TableData<ReciboViewModel>>>(GetReciboAsync))"
+          Bordered="true"
+          Dense="true" Hover="true" ReadOnly="true" SortLabel="Ordenar por" Elevation="4" @ref="_reciboTable">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Recibos</MudText>
+        <MudSpacer />
+        <MudButton Class="ma-2" UserAttributes="@(new Dictionary<string, object> {{"id","btnReturn"}})"
+                   Variant="Variant.Filled" @onclick="NavigateToCuentaPage" StartIcon="@Icons.Material.Filled.ArrowBack" Color="Color.Error">Regresar</MudButton>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>No. Recibo</MudTh>
+        <MudTh>Fecha</MudTh>
+        <MudTh>Cantidad</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="No. Recibo">
+            @context.NoRecibo
+        </MudTd>
+        <MudTd DataLabel="Fecha">
+            @context.Fecha.ToString("dd/MM/yyyy")
+        </MudTd>
+        <MudTd DataLabel="Cantidad">
+            $ @context.Cantidad.ToString("N2")
+        </MudTd>
+    </RowTemplate>
+    <NoRecordsContent>
+        <MudText>No se encontraron registros</MudText>
+    </NoRecordsContent>
+    <LoadingContent>
+        <MudText>Cargando...</MudText>
+    </LoadingContent>
+    <PagerContent>
+        <MudTablePager PageSizeOptions="_pageSizeOptions" RowsPerPageString="Resultados por página" InfoFormat="@_infoFormat" />
+    </PagerContent>
+    <FooterContent>
+        <MudTd></MudTd>
+        <MudTd></MudTd>
+        <MudTd>
+            Total: $ @_SumCantidad.ToString("N2")
+        </MudTd>
+    </FooterContent>
+</MudTable>

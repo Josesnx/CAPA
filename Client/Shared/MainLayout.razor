@@ -1,7 +1,7 @@
 ﻿@using Client.Data.Herramienta
 @inherits LayoutComponentBase
 
-<MudThemeProvider />
+<MudThemeProvider @bind-IsDarkMode="@_isDarkMode" Theme="_theme" />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
@@ -9,6 +9,7 @@
     <MudAppBar Elevation="0">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
         <MudSpacer />
+        <MudCheckBox @bind-Value="@_isDarkMode" Color="Color.Surface" CheckedIcon="@Icons.Material.Sharp.LightMode" UncheckedIcon="@Icons.Material.Outlined.DarkMode"></MudCheckBox>
     </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen" Elevation="1">
         <MudDrawerHeader>
@@ -17,7 +18,7 @@
         <NavMenu />
     </MudDrawer>
     <MudMainContent>
-        <MudContainer MaxWidth="MaxWidth.Large" Class="my-4 pt-4">
+        <MudContainer MaxWidth="MaxWidth.Large" Class="my-2 pt-2">
             @Body
         </MudContainer>
     </MudMainContent>
@@ -25,6 +26,8 @@
 
 @code {
     bool _drawerOpen = true;
+    private MudTheme _theme = new();
+    private bool _isDarkMode;
 
     void DrawerToggle()
     {

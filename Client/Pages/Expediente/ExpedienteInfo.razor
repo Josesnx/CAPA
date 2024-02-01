@@ -7,10 +7,18 @@
         <MudCard>
             <MudCardHeader>
                 <CardHeaderContent>
-                    <MudText Typo="Typo.h5">Expediente de @_model.Usuario.NombreCompleto</MudText>
+                    <MudText Typo="Typo.h5">Expediente</MudText>
+                    <MudText Typo="Typo.h6">@_model.Usuario.NombreCompleto</MudText>
                 </CardHeaderContent>
                 <CardHeaderActions>
-                        <MudCheckBox @bind-Value="@_edit" Color="Color.Warning" CheckedIcon="@Icons.Material.Filled.DriveFileRenameOutline" UncheckedIcon="@Icons.Material.Outlined.DriveFileRenameOutline"></MudCheckBox>
+                    <div style="display: flex; align-items: center;">
+                            <MudCheckBox @bind-Value="@_edit" Color="Color.Warning" CheckedIcon="@Icons.Material.Filled.DriveFileRenameOutline"
+                            UncheckedIcon="@Icons.Material.Outlined.DriveFileRenameOutline"></MudCheckBox>
+                            <MudButton Class="ma-2" UserAttributes="@(new Dictionary<string, object> {{"id","btnReceipt"}})"
+                                       Variant="Variant.Filled" @onclick="NavigateToReciboPage" StartIcon="@Icons.Material.Filled.Receipt" Color="Color.Warning">Recibos</MudButton>
+                            <MudButton Class="ma-2" UserAttributes="@(new Dictionary<string, object> {{"id","btnReturn"}})"
+                                       Variant="Variant.Filled" @onclick="NavigateToCuentaPage" StartIcon="@Icons.Material.Filled.ArrowBack" Color="Color.Error">Regresar</MudButton>
+                    </div>
                 </CardHeaderActions>
             </MudCardHeader>
             <MudCard>
@@ -31,8 +39,7 @@
             {
                 <MudCardActions>
                     <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Actualizar</MudButton>
-                    <MudButton Class="ma-2" UserAttributes="@(new Dictionary<string, object> {{"id","btnCancel"}})"
-                               Variant="Variant.Filled" @onclick="NavigateToCuentaPage" Color="Color.Error">Cancelar</MudButton>
+                    <MudButton Class="ma-2" @onclick="() => _edit = false" Variant="Variant.Filled" Color="Color.Error">Cancelar</MudButton>
                 </MudCardActions>
             }
         </MudCard>

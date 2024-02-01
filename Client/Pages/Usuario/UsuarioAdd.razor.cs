@@ -16,13 +16,13 @@ public partial class UsuarioAdd : ComponentBase
     [Inject]
     public ISnackbar SnackBar { get; set; } = null!;
 
+    private readonly string _url = "https://apex.oracle.com/pls/apex/capa/SFA/";
     private readonly UsuarioViewModel _model = new();
     private readonly DireccionViewModel _modelDireccion = new();
     private List<EstadoViewModel> _listEstado = new();
     private List<MunicipioViewModel> _listMunicipio = new();
     private List<ColoniaViewModel> _listColonia = new();
     private List<TipoVialidadViewModel> _listVialidad = new();
-    private readonly string _url = "https://apex.oracle.com/pls/apex/capa/SFA/";
 
     protected override async Task OnInitializedAsync()
     {

@@ -8,13 +8,15 @@
             <MudCardHeader>
                 <CardHeaderContent>
                     <MudText Typo="Typo.h5">Estado de Cuenta</MudText>
-                    <MudText Typo="Typo.h4">@_model.Usuario.NombreCompleto</MudText>
+                    <MudText Typo="Typo.h6">@_model.Usuario.NombreCompleto</MudText>
                 </CardHeaderContent>
                 <CardHeaderActions>
-                    <MudCheckBox @bind-Value="@_edit" Color="Color.Warning" CheckedIcon="@Icons.Material.Filled.DriveFileRenameOutline" 
-                    UncheckedIcon="@Icons.Material.Outlined.DriveFileRenameOutline"></MudCheckBox>
-                    <MudButton Class="ma-2" UserAttributes="@(new Dictionary<string, object> {{"id","btnReturn"}})"
-                                   Variant="Variant.Filled" @onclick="NavigateToCuentaPage" StartIcon="@Icons.Material.Filled.ArrowBack" Color="Color.Error">Regresar</MudButton>
+                    <div style="display: flex; align-items: center;">
+                            <MudCheckBox @bind-Value="@_edit" Color="Color.Warning" CheckedIcon="@Icons.Material.Filled.DriveFileRenameOutline"
+                                         UncheckedIcon="@Icons.Material.Outlined.DriveFileRenameOutline"></MudCheckBox>
+                            <MudButton Class="ma-2" UserAttributes="@(new Dictionary<string, object> {{"id","btnReturn"}})"
+                                       Variant="Variant.Filled" @onclick="NavigateToCuentaPage" StartIcon="@Icons.Material.Filled.ArrowBack" Color="Color.Error">Regresar</MudButton>
+                    </div>
                 </CardHeaderActions>
             </MudCardHeader>
                 <MudCard>

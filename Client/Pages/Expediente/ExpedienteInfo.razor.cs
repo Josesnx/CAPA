@@ -27,6 +27,7 @@ public partial class ExpedienteInfo : ComponentBase
     {
         _model.TipoToma = new TipoTomaViewModel();
         _model.Usuario = new UsuarioViewModel();
+        _model.Cuenta = new CuentaViewModel();
 
         var apiResponse = await Http!.GetFromJsonAsync<ApiResponseViewModel<ExpedienteViewModel>>(_url + $"EXPEDIENTE?IdExpediente={IdExpediente}") ?? new();
         _model = apiResponse.Items.FirstOrDefault()!;
@@ -63,5 +64,10 @@ public partial class ExpedienteInfo : ComponentBase
             return;
         }
         SnackBar.Add("Ocurrió un error al actualizar el registro", Severity.Error);
+    }
+
+    private void NavigateToReciboPage()
+    {
+        Navigator.NavigateTo($"/Recibo/{_model.IdCuenta}");
     }
 }

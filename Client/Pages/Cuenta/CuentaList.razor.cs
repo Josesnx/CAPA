@@ -87,6 +87,11 @@ public partial class CuentaList : ComponentBase
     {
         Navigator.NavigateTo($"/Expediente/{expediente.IdExpediente}");
     }
+    
+    private void NavigateToReciboPage(ExpedienteViewModel expediente)
+    {
+        Navigator.NavigateTo($"/Recibo/{expediente.IdCuenta}");
+    }
 
     private async void NavigateToEstadoCuentaPage(ExpedienteViewModel expediente)
     {

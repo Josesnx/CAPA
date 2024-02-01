@@ -19,7 +19,7 @@ public partial class Index : ComponentBase
         }
         catch (HttpRequestException ex)
         {
-            if (ex.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+            if (ex.StatusCode == System.Net.HttpStatusCode.InternalServerError || ex.StatusCode == System.Net.HttpStatusCode.GatewayTimeout)
             {
                 _errorApi = true;
             }

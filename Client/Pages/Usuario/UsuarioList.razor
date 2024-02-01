@@ -32,7 +32,7 @@
                            @onclick="()=> NavigateToEditUsuarioPage(context)" Size="Size.Medium"></MudIconButton>
         </MudTd>
         <MudTd DataLabel="Nombre">
-            @context.Usuario.Nombre @context.Usuario.ApellidoPaterno @context.Usuario.ApellidoMaterno
+            @context.Usuario.NombreCompleto
         </MudTd>
         <MudTd DataLabel="CURP">
             @context.Usuario.Curp
@@ -41,16 +41,19 @@
             @context.Usuario.Rfc
         </MudTd>
         <MudTd DataLabel="Calle">
-            @context.Calle INT: @context.NumeroInterior EXT: @context.NumeroExterior
+            <div>@context.Calle</div>
+            <div>INT: @context.NumeroInterior</div>
+            <div>EXT: @context.NumeroExterior</div>
         </MudTd>
         <MudTd DataLabel="Entre calles">
-            @context.Calle1 y @context.Calle2
+            <div>@context.Calle1</div> y
+            <div>@context.Calle2</div> 
         </MudTd>
         @if (_checkbox)
         {
             <MudTd DataLabel="Telefonos">
-                Teléfono: @context.Usuario.Telefono
-                Teléfono Fijo: @context.Usuario.TelefonoFijo
+                <div>Teléfono: @context.Usuario.Telefono</div>
+                <div>Teléfono Fijo: @context.Usuario.TelefonoFijo</div>
             </MudTd>
             <MudTd DataLabel="Colonia">
                 @context.Colonia.Nombre

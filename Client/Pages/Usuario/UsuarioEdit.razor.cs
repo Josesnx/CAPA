@@ -19,13 +19,13 @@ public partial class UsuarioEdit : ComponentBase
     [Parameter]
     public int IdUsuario { get; set; }
 
+    private const string _url = "https://apex.oracle.com/pls/apex/capa/SFA/";
     private UsuarioViewModel _model = new();
     private DireccionViewModel _modelDireccion = new();
     private List<EstadoViewModel> _listEstado = new();
     private List<MunicipioViewModel> _listMunicipio = new();
     private List<ColoniaViewModel> _listColonia = new();
     private List<TipoVialidadViewModel> _listVialidad = new();
-    private const string _url = "https://apex.oracle.com/pls/apex/capa/SFA/";
 
     protected override async Task OnInitializedAsync()
     {
@@ -38,27 +38,27 @@ public partial class UsuarioEdit : ComponentBase
             }
         };
 
-        ApiResponseViewModel<UsuarioViewModel> apiResponseU = await Http!.GetFromJsonAsync<ApiResponseViewModel<UsuarioViewModel>>(_url + $"USUARIOS?IdUsuario={IdUsuario}") ?? new();
+        var apiResponseU = await Http!.GetFromJsonAsync<ApiResponseViewModel<UsuarioViewModel>>(_url + $"USUARIOS?IdUsuario={IdUsuario}") ?? new();
         _model = apiResponseU.Items.FirstOrDefault()!;
-        ApiResponseViewModel<DireccionViewModel> apiResponseD = await Http!.GetFromJsonAsync<ApiResponseViewModel<DireccionViewModel>>(_url + $"USUARIOS?IdUsuario={IdUsuario}") ?? new();
+        var apiResponseD = await Http!.GetFromJsonAsync<ApiResponseViewModel<DireccionViewModel>>(_url + $"USUARIOS?IdUsuario={IdUsuario}") ?? new();
         _modelDireccion = apiResponseD.Items.FirstOrDefault()!;
-        ApiResponseViewModel<TipoVialidadViewModel> apiResponseT = await Http!.GetFromJsonAsync<ApiResponseViewModel<TipoVialidadViewModel>>(_url + $"USUARIOS?IdUsuario={IdUsuario}") ?? new();
+        var apiResponseT = await Http!.GetFromJsonAsync<ApiResponseViewModel<TipoVialidadViewModel>>(_url + $"USUARIOS?IdUsuario={IdUsuario}") ?? new();
         _modelDireccion.TipoVialidad = apiResponseT.Items.FirstOrDefault()!;
-        ApiResponseViewModel<ColoniaViewModel> apiResponseC = await Http!.GetFromJsonAsync<ApiResponseViewModel<ColoniaViewModel>>(_url + $"USUARIOS?IdUsuario={IdUsuario}") ?? new();
+        var apiResponseC = await Http!.GetFromJsonAsync<ApiResponseViewModel<ColoniaViewModel>>(_url + $"USUARIOS?IdUsuario={IdUsuario}") ?? new();
         _modelDireccion.Colonia = apiResponseC.Items.FirstOrDefault()!;
-        ApiResponseViewModel<MunicipioViewModel> apiResponseM = await Http!.GetFromJsonAsync<ApiResponseViewModel<MunicipioViewModel>>(_url + $"USUARIOS?IdUsuario={IdUsuario}") ?? new();
+        var apiResponseM = await Http!.GetFromJsonAsync<ApiResponseViewModel<MunicipioViewModel>>(_url + $"USUARIOS?IdUsuario={IdUsuario}") ?? new();
         _modelDireccion.Colonia.Municipio = apiResponseM.Items.FirstOrDefault()!;
-        ApiResponseViewModel<EstadoViewModel> apiResponseEs = await Http!.GetFromJsonAsync<ApiResponseViewModel<EstadoViewModel>>(_url + $"USUARIOS?IdUsuario={IdUsuario}") ?? new();
+        var apiResponseEs = await Http!.GetFromJsonAsync<ApiResponseViewModel<EstadoViewModel>>(_url + $"USUARIOS?IdUsuario={IdUsuario}") ?? new();
         _modelDireccion.Colonia.Municipio.Estado = apiResponseEs.Items.FirstOrDefault()!;
 
         await GetMunicipioXEstado();
 
         await GetColoniaXMunicipio();
 
-        ApiResponseViewModel<EstadoViewModel> apiResponseE = await Http!.GetFromJsonAsync<ApiResponseViewModel<EstadoViewModel>>(_url + "CAT_E") ?? new();
+        var apiResponseE = await Http!.GetFromJsonAsync<ApiResponseViewModel<EstadoViewModel>>(_url + "CAT_E") ?? new();
         _listEstado = apiResponseE.Items;
 
-        ApiResponseViewModel<TipoVialidadViewModel> apiResponseTv = await Http!.GetFromJsonAsync<ApiResponseViewModel<TipoVialidadViewModel>>(_url + "CAT_TV") ?? new();
+        var apiResponseTv = await Http!.GetFromJsonAsync<ApiResponseViewModel<TipoVialidadViewModel>>(_url + "CAT_TV") ?? new();
         _listVialidad = apiResponseTv.Items;
     }
 
@@ -69,7 +69,7 @@ public partial class UsuarioEdit : ComponentBase
 
     protected async Task EditUsuarioAsync()
     {
-        var parametrosPaginacion = new Dictionary<string, object?>
+        var parametrosUsuario = new Dictionary<string, object?>
         {
             { "IdUsuario", _model.IdUsuario },
             { "Nombre", _model.Nombre },
@@ -90,7 +90,7 @@ public partial class UsuarioEdit : ComponentBase
             { "Calle2", _modelDireccion.Calle2}
         };
 
-        var response = await Http!.PutAsJsonAsync(Tool.GenerateQueryString(parametrosPaginacion!, _url + "USUARIOS"), _model) ?? new();
+        var response = await Http!.PutAsJsonAsync(Tool.GenerateQueryString(parametrosUsuario!, _url + "USUARIOS"), _model) ?? new();
 
         if (response.IsSuccessStatusCode)
         {
@@ -103,13 +103,13 @@ public partial class UsuarioEdit : ComponentBase
 
     protected async Task GetMunicipioXEstado()
     {
-        ApiResponseViewModel<MunicipioViewModel> apiResponse = await Http!.GetFromJsonAsync<ApiResponseViewModel<MunicipioViewModel>>(_url + $"CAT_M?IdEstado={_modelDireccion.Colonia.Municipio.Estado.IdEstado}") ?? new();
+        var apiResponse = await Http!.GetFromJsonAsync<ApiResponseViewModel<MunicipioViewModel>>(_url + $"CAT_M?IdEstado={_modelDireccion.Colonia.Municipio.Estado.IdEstado}") ?? new();
         _listMunicipio = apiResponse.Items;
     }
 
     protected async Task GetColoniaXMunicipio()
     {
-        ApiResponseViewModel<ColoniaViewModel> apiResponse = await Http!.GetFromJsonAsync<ApiResponseViewModel<ColoniaViewModel>>(_url + $"CAT_C?IdMunicipio={_modelDireccion.Colonia.Municipio.IdMunicipio}") ?? new();
+        var apiResponse = await Http!.GetFromJsonAsync<ApiResponseViewModel<ColoniaViewModel>>(_url + $"CAT_C?IdMunicipio={_modelDireccion.Colonia.Municipio.IdMunicipio}") ?? new();
         _listColonia = apiResponse.Items;
     }
 }

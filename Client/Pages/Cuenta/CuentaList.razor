@@ -25,7 +25,7 @@
             @context.Usuario.Nombre @context.Usuario.ApellidoPaterno @context.Usuario.ApellidoMaterno
         </MudTd>
         <MudTd DataLabel="Total">
-            @context.Cuenta.Total
+            $ @context.Cuenta.Total.ToString("N2")
         </MudTd>
         <MudTd DataLabel="Estatus">
             @context.Cuenta.EstatusString
@@ -33,20 +33,22 @@
         @if (_checkbox)
         {
             <MudTd DataLabel="Tipo Toma">
-                @context.TipoToma.Toma
-                No: @context.TipoToma.NoToma
+                <div>@context.TipoToma.Toma</div>
+                <div>No: @context.TipoToma.NoToma</div>
             </MudTd>
             <MudTd DataLabel="Tarifa">
-                Tipo: @context.Cuenta.Tarifa.Tipo
-                Año: @context.Cuenta.Tarifa.Anio
-                Precio: $@context.Cuenta.Tarifa.Precio
+                <div>Tipo: @context.Cuenta.Tarifa.Tipo</div>
+                <div>Año: @context.Cuenta.Tarifa.Anio</div>
+                <div>Precio: $@context.Cuenta.Tarifa.Precio</div>
             </MudTd>
         }
-        <MudTd DataLabel="Expediente/Cuenta" Style="text-align: center">
+        <MudTd DataLabel="Expediente/Cuenta/Recibo" Style="text-align: center">
             <MudIconButton UserAttributes="@(new Dictionary<string, object> {{"id","btnExpediente"}})" Icon="@Icons.Material.Filled.Folder" Color="Color.Primary"
                            @onclick="()=> NavigateToExpedientePage(context)" Size="Size.Medium"></MudIconButton>
             <MudIconButton UserAttributes="@(new Dictionary<string, object> {{"id","btnEstadoCuenta"}})" Icon="@Icons.Material.Filled.AccountBalanceWallet" Color="Color.Primary"
                            @onclick="()=> NavigateToEstadoCuentaPage(context)" Size="Size.Medium"></MudIconButton>
+            <MudIconButton UserAttributes="@(new Dictionary<string, object> {{"id","btnEstadoCuenta"}})" Icon="@Icons.Material.Filled.Receipt" Color="Color.Primary"
+                           @onclick="()=> NavigateToReciboPage(context)" Size="Size.Medium"></MudIconButton>
         </MudTd>
     </RowTemplate>
     <NoRecordsContent>
