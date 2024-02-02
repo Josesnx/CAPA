@@ -5,44 +5,42 @@
     <EditForm Model="@_model" OnValidSubmit="EditEstadoCuentaAsync">
         <FluentValidationValidator />
         <MudCard>
-            <MudCardHeader>
+            <MudCardHeader Style="margin-bottom: -45px;">
                 <CardHeaderContent>
                     <MudText Typo="Typo.h5">Estado de Cuenta</MudText>
-                    <MudText Typo="Typo.h6">@_model.Usuario.NombreCompleto</MudText>
+                    <MudText Typo="Typo.subtitle1">@_model.Usuario.NombreCompleto</MudText>
                 </CardHeaderContent>
                 <CardHeaderActions>
                     <div style="display: flex; align-items: center;">
-                            <MudCheckBox @bind-Value="@_edit" Color="Color.Warning" CheckedIcon="@Icons.Material.Filled.DriveFileRenameOutline"
-                                         UncheckedIcon="@Icons.Material.Outlined.DriveFileRenameOutline"></MudCheckBox>
-                            <MudButton Class="ma-2" UserAttributes="@(new Dictionary<string, object> {{"id","btnReturn"}})"
-                                       Variant="Variant.Filled" @onclick="NavigateToCuentaPage" StartIcon="@Icons.Material.Filled.ArrowBack" Color="Color.Error">Regresar</MudButton>
+                        <MudButton Class="ma-2" UserAttributes="@(new Dictionary<string, object> {{"id","btnEdit"}})"
+                                    Variant="Variant.Filled" @onclick="() => _edit = !_edit" StartIcon="@Icons.Material.Filled.DriveFileRenameOutline" Color="Color.Success">Editar</MudButton>
+                        <MudButton Class="ma-2" UserAttributes="@(new Dictionary<string, object> {{"id","btnReturn"}})"
+                                    Variant="Variant.Filled" @onclick="NavigateToCuentaPage" StartIcon="@Icons.Material.Filled.ArrowBack" Color="Color.Error">Regresar</MudButton>
                     </div>
                 </CardHeaderActions>
             </MudCardHeader>
-                <MudCard>
-                    <MudCardContent>
-                        <MudNumericField Label="Año" Class="mt-3" HelperText="Requerido"
-                                         @bind-Value="_model.EstadoCuenta.Anio" For="@(() => _model.EstadoCuenta.Anio)" Format="N0" Disabled="!_edit" />
-                        <MudNumericField Label="Meses" Class="mt-3" HelperText="Requerido"
-                                         @bind-Value="_model.EstadoCuenta.Meses" For="@(() => _model.EstadoCuenta.Meses)" Format="N0" Disabled="!_edit" />
-                        <MudNumericField Label="Total de Meses" Class="mt-3" HelperText="Requerido"
-                                         @bind-Value="_model.EstadoCuenta.TotalMeses" For="@(() => _model.EstadoCuenta.TotalMeses)" Format="N0" Disabled="!_edit" />
-                        <MudNumericField Label="Total" Class="mt-3" HelperText="Requerido"
-                                         @bind-Value="_model.Total" For="@(() => _model.Total)" Format="N2" Disabled="!_edit" />
-                        <MudSelect T="int" Label="Estatus" AnchorOrigin="Origin.TopCenter" Disabled="!_edit"
-                                   @bind-Value="_model.EstadoCuenta.Estatus" For="@(() => _model.EstadoCuenta.Estatus)">
-                            <MudSelectItem Value="@(1)">Activo</MudSelectItem>
-                            <MudSelectItem Value="@(0)">Inactivo</MudSelectItem>
-                        </MudSelect>
-                    </MudCardContent>
-                </MudCard>
-                @if (_edit)
-                {
-                    <MudCardActions>
-                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Actualizar</MudButton>
-                        <MudButton Class="ma-2" @onclick="() => _edit = false" Variant="Variant.Filled" Color="Color.Error">Cancelar</MudButton>
-                    </MudCardActions>
-                }
+            <MudCardContent>
+                <MudNumericField Label="Año" Class="mt-3" HelperText="Requerido"
+                                    @bind-Value="_model.EstadoCuenta.Anio" For="@(() => _model.EstadoCuenta.Anio)" Format="N0" Disabled="!_edit" />
+                <MudNumericField Label="Meses" Class="mt-3" HelperText="Requerido"
+                                    @bind-Value="_model.EstadoCuenta.Meses" For="@(() => _model.EstadoCuenta.Meses)" Format="N0" Disabled="!_edit" />
+                <MudNumericField Label="Total de Meses" Class="mt-3" HelperText="Requerido"
+                                    @bind-Value="_model.EstadoCuenta.TotalMeses" For="@(() => _model.EstadoCuenta.TotalMeses)" Format="N0" Disabled="!_edit" />
+                <MudNumericField Label="Total" Class="mt-3" HelperText="Requerido"
+                                    @bind-Value="_model.Total" For="@(() => _model.Total)" Format="N2" Disabled="!_edit" />
+                <MudSelect T="int" Label="Estatus" AnchorOrigin="Origin.TopCenter" Disabled="!_edit"
+                            @bind-Value="_model.EstadoCuenta.Estatus" For="@(() => _model.EstadoCuenta.Estatus)">
+                    <MudSelectItem Value="@(1)">Activo</MudSelectItem>
+                    <MudSelectItem Value="@(0)">Inactivo</MudSelectItem>
+                </MudSelect>
+            </MudCardContent>
+            @if (_edit)
+            {
+                <MudCardActions Style="margin-top: -20px;">
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Actualizar</MudButton>
+                    <MudButton Class="ma-2" @onclick="() => _edit = false" Variant="Variant.Filled" Color="Color.Error">Cancelar</MudButton>
+                </MudCardActions>
+            }
         </MudCard>
     </EditForm>
 </MudCard>

@@ -19,6 +19,7 @@
             <MudTh>Tipo Toma</MudTh>
             <MudTh>Tarifa</MudTh>
         }
+        <MudTh>Expediente/Estado de Cuenta/Recibo</MudTh>
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="Nombre">
@@ -43,12 +44,12 @@
             </MudTd>
         }
         <MudTd DataLabel="Expediente/Cuenta/Recibo" Style="text-align: center">
-            <MudIconButton UserAttributes="@(new Dictionary<string, object> {{"id","btnExpediente"}})" Icon="@Icons.Material.Filled.Folder" Color="Color.Primary"
+            <MudIconButton UserAttributes="@(new Dictionary<string, object> {{"id","btnExpediente"}})" Icon="@Icons.Material.Filled.Folder" Color="Color.Error"
                            @onclick="()=> NavigateToExpedientePage(context)" Size="Size.Medium"></MudIconButton>
-            <MudIconButton UserAttributes="@(new Dictionary<string, object> {{"id","btnEstadoCuenta"}})" Icon="@Icons.Material.Filled.AccountBalanceWallet" Color="Color.Primary"
-                           @onclick="()=> NavigateToEstadoCuentaPage(context)" Size="Size.Medium"></MudIconButton>
-            <MudIconButton UserAttributes="@(new Dictionary<string, object> {{"id","btnEstadoCuenta"}})" Icon="@Icons.Material.Filled.Receipt" Color="Color.Primary"
-                           @onclick="()=> NavigateToReciboPage(context)" Size="Size.Medium"></MudIconButton>
+            <MudIconButton UserAttributes="@(new Dictionary<string, object> {{"id","btnEstadoCuenta"}})" Icon="@Icons.Material.Filled.AccountBalanceWallet" Color="Color.Tertiary"
+                           @onclick="()=> NavigateToEstadoCuentaPage(context)" Size="Size.Medium">Estado de Cuenta</MudIconButton>
+            <MudIconButton UserAttributes="@(new Dictionary<string, object> {{"id","btnEstadoCuenta"}})" Icon="@Icons.Material.Filled.Receipt" Color="Color.Warning"
+                           @onclick="()=> NavigateToReciboPage(context)" Size="Size.Medium">Recibos</MudIconButton>
         </MudTd>
     </RowTemplate>
     <NoRecordsContent>

@@ -6,22 +6,18 @@
     <EditForm Model="@_model" OnValidSubmit="SavePagoAsync">
         <FluentValidationValidator />
         <MudCard>
-            <MudCardHeader>
-                <CardHeaderContent>
-                    <MudText Typo="Typo.h5">Realizar pago</MudText>
-                </CardHeaderContent>
-            </MudCardHeader>
             <MudCardContent>
+                <MudText Typo="Typo.h5">Realizar pago</MudText>
                 <MudAutocomplete T="UsuarioViewModel" Label="Usuarios" @bind-Value="_model.Cuenta.Usuario"
                                  SearchFunc="@SearchUsuarios" ToStringFunc="@(e => e == null ? null : e.NombreCompleto)"
                                  For="@(() => _model.Cuenta.Usuario)" HelperText="Requerido"
-                                 Strict="false" CoerceValue="true" ResetValueOnEmptyText="true" />
+                                 Strict="false" CoerceValue="true" ResetValueOnEmptyText="true" Margin="Margin.Dense" />
                 <MudTextField Label="No. Recibo" HelperText="Requerido"
-                              @bind-Value="_model.NoRecibo" For="@(() => _model.NoRecibo)" />
+                              @bind-Value="_model.NoRecibo" For="@(() => _model.NoRecibo)" Margin="Margin.Dense" />
                 <MudDatePicker Label="Fecha" @bind-Date="_fecha" DisableToolbar="true" HelperText="Requerido" />
                 <MudSelect T="int" AnchorOrigin="Origin.BottomCenter"
                            @bind-Value="_model.Cuenta.Tarifa.IdTarifa" For="@(() => _model.Cuenta.Tarifa.IdTarifa)"
-                           HelperText="Requerido" SelectedValuesChanged="CalcularCantidad">
+                           HelperText="Requerido" SelectedValuesChanged="CalcularCantidad" Margin="Margin.Dense">
                     <MudSelectItem Value="0" Disabled="true">Tarifa</MudSelectItem>
                     @foreach (var tarifa in _listTarifa)
                     {
@@ -29,11 +25,11 @@
                     }
                 </MudSelect>
                 <MudNumericField Label="Cantidad" Class="mt-3" HelperText="Requerido"
-                                 @bind-Value="_model.Cantidad" For="@(() => _model.Cantidad)" Format="N2" />
+                                 @bind-Value="_model.Cantidad" For="@(() => _model.Cantidad)" Format="N2" Margin="Margin.Dense" />
+                <MudCardActions>
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" Size="Size.Medium">Pagar</MudButton>
+                </MudCardActions>
             </MudCardContent>
-            <MudCardActions>
-                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Pagar</MudButton>
-            </MudCardActions>
         </MudCard>
     </EditForm>
 </MudCard>
