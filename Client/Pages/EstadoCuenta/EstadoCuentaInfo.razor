@@ -5,7 +5,7 @@
     <EditForm Model="@_model" OnValidSubmit="EditEstadoCuentaAsync">
         <FluentValidationValidator />
         <MudCard>
-            <MudCardHeader Style="margin-bottom: -45px;">
+            <MudCardHeader Style="margin-bottom: -35px;">
                 <CardHeaderContent>
                     <MudText Typo="Typo.h5">Estado de Cuenta</MudText>
                     <MudText Typo="Typo.subtitle1">@_model.Usuario.NombreCompleto</MudText>
@@ -20,14 +20,17 @@
                 </CardHeaderActions>
             </MudCardHeader>
             <MudCardContent>
-                <MudNumericField Label="Año" Class="mt-3" HelperText="Requerido"
-                                    @bind-Value="_model.EstadoCuenta.Anio" For="@(() => _model.EstadoCuenta.Anio)" Format="N0" Disabled="!_edit" />
+                <MudNumericField Label="Años" Class="mt-3" HelperText="Requerido"
+                                    @bind-Value="_model.EstadoCuenta.Anio" For="@(() => _model.EstadoCuenta.Anio)"
+                                    Format="N0" Disabled="!_edit" TextChanged="CalcularTotalMeses" Min="0" />
                 <MudNumericField Label="Meses" Class="mt-3" HelperText="Requerido"
-                                    @bind-Value="_model.EstadoCuenta.Meses" For="@(() => _model.EstadoCuenta.Meses)" Format="N0" Disabled="!_edit" />
+                                    @bind-Value="_model.EstadoCuenta.Meses" For="@(() => _model.EstadoCuenta.Meses)"
+                                    Format="N0" Disabled="!_edit" TextChanged="CalcularTotalMeses" Min="0" Max="11"/>
                 <MudNumericField Label="Total de Meses" Class="mt-3" HelperText="Requerido"
-                                    @bind-Value="_model.EstadoCuenta.TotalMeses" For="@(() => _model.EstadoCuenta.TotalMeses)" Format="N0" Disabled="!_edit" />
+                                    @bind-Value="_model.EstadoCuenta.TotalMeses" For="@(() => _model.EstadoCuenta.TotalMeses)"
+                                    Format="N0" Disabled="!_edit" ReadOnly="true" Min="0"/>
                 <MudNumericField Label="Total" Class="mt-3" HelperText="Requerido"
-                                    @bind-Value="_model.Total" For="@(() => _model.Total)" Format="N2" Disabled="!_edit" />
+                                    @bind-Value="_model.Total" For="@(() => _model.Total)" Format="N2" Disabled="!_edit" Min="0"/>
                 <MudSelect T="int" Label="Estatus" AnchorOrigin="Origin.TopCenter" Disabled="!_edit"
                             @bind-Value="_model.EstadoCuenta.Estatus" For="@(() => _model.EstadoCuenta.Estatus)">
                     <MudSelectItem Value="@(1)">Activo</MudSelectItem>

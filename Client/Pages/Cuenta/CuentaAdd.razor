@@ -20,15 +20,10 @@
                                        SearchFunc="@SearchUsuarios" ToStringFunc="@(e => e == null ? null : e.NombreCompleto)"
                                              For="@(() => _expediente.Usuario)"
                                              Strict="false" CoerceValue="true" ResetValueOnEmptyText="true" />
-                            <MudSelect T="int" AnchorOrigin="Origin.BottomCenter"
-                                       @bind-Value="_expediente.TipoToma.IdTipoToma" For="@(() => _expediente.TipoToma.IdTipoToma)"
-                                       HelperText="Requerido">
-                                <MudSelectItem Value="0" Disabled="true">Tipo Toma</MudSelectItem>
-                                @foreach (var toma in _listTipoToma)
-                                {
-                                    <MudSelectItem Value="@toma.IdTipoToma">@toma.Toma</MudSelectItem>
-                                }
-                            </MudSelect>
+                            <MudTextField Label="Toma" HelperText="Requerido" Class="mt-3"
+                                          @bind-Value="_expediente.TipoToma.Toma" For="@(() => _expediente.TipoToma.Toma)" />
+                            <MudTextField Label="No. de Toma" HelperText="Requerido" Class="mt-3"
+                                          @bind-Value="_expediente.TipoToma.NoToma" For="@(() => _expediente.TipoToma.NoToma)" />
                             <MudSelect T="int" AnchorOrigin="Origin.BottomCenter"
                                        @bind-Value="_expediente.Cuenta.Tarifa.IdTarifa" For="@(() => _expediente.Cuenta.Tarifa.IdTarifa)"
                                        HelperText="Requerido">
@@ -58,13 +53,13 @@
                     <MudCard>
                         <MudCardContent>
                             <MudText Typo="Typo.subtitle1">Estado de Cuenta</MudText>
-                            <MudNumericField Label="Año" Class="mt-3" HelperText="Requerido"
+                            <MudNumericField Label="Año" Class="mt-3" HelperText="Requerido" Disabled="_nuevaCuenta"
                                              @bind-Value="_expediente.Cuenta.EstadoCuenta.Anio" For="@(() => _expediente.Cuenta.EstadoCuenta.Anio)" Format="N0" />
-                            <MudNumericField Label="Meses" Class="mt-3" HelperText="Requerido"
+                            <MudNumericField Label="Meses" Class="mt-3" HelperText="Requerido" Disabled="_nuevaCuenta"
                                              @bind-Value="_expediente.Cuenta.EstadoCuenta.Meses" For="@(() => _expediente.Cuenta.EstadoCuenta.Meses)" Format="N0" />
-                            <MudNumericField Label="Total de Meses" Class="mt-3" HelperText="Requerido"
+                            <MudNumericField Label="Total de Meses" Class="mt-3" HelperText="Requerido" Disabled="_nuevaCuenta"
                                              @bind-Value="_expediente.Cuenta.EstadoCuenta.TotalMeses" For="@(() => _expediente.Cuenta.EstadoCuenta.TotalMeses)" Format="N0" />
-                            <MudNumericField Label="Total" Class="mt-3" HelperText="Requerido"
+                            <MudNumericField Label="Total" Class="mt-3" HelperText="Requerido" Disabled="_nuevaCuenta"
                                              @bind-Value="_expediente.Cuenta.Total" For="@(() => _expediente.Cuenta.Total)" Format="N2" />
                         </MudCardContent>
                     </MudCard>

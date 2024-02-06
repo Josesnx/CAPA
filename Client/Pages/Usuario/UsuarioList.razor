@@ -2,7 +2,7 @@
 @using Client.Data
 
 <MudTable UserAttributes="@(new Dictionary<string, object> {{"id","tblUsuarios"}})" ServerData="@(new Func<TableState, Task<TableData<DireccionViewModel>>>(GetUsuarioAsync))"
-          Bordered="true"
+          Bordered="true" Height="600px"
           Dense="true" Hover="true" ReadOnly="true" SortLabel="Ordenar por" Elevation="4" @ref="_usuarioTable">
     <ToolBarContent>
         <MudText Typo="Typo.h6">Usuarios</MudText>

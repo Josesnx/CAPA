@@ -44,7 +44,7 @@ public partial class ExpedienteInfo : ComponentBase
 
     protected async Task EditExpedienteAsync()
     {
-        var parametrosPaginacion = new Dictionary<string, object?>
+        var parametroExpediente = new Dictionary<string, object?>
         {
             { "IdExpediente", _model.IdExpediente },
             { "Contrato", _model.Contrato },
@@ -55,7 +55,7 @@ public partial class ExpedienteInfo : ComponentBase
             { "NoToma", _model.TipoToma.NoToma}
         };
 
-        var response = await Http!.PutAsJsonAsync(Tool.GenerateQueryString(parametrosPaginacion!, _url + "EXPEDIENTE"), _model) ?? new();
+        var response = await Http!.PutAsJsonAsync(Tool.GenerateQueryString(parametroExpediente!, _url + "EXPEDIENTE"), _model) ?? new();
 
         if (response.IsSuccessStatusCode)
         {

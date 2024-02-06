@@ -53,7 +53,7 @@ public partial class EstadoCuentaInfo : ComponentBase
             { "Total", _model.Total}
         };
 
-        var response = await Http!.PutAsJsonAsync(Tool.GenerateQueryString(parametrosEsatdoCuenta!, _url + "EXPEDIENTE"), _model) ?? new();
+        var response = await Http!.PutAsJsonAsync(Tool.GenerateQueryString(parametrosEsatdoCuenta!, _url + "ESTADOCUENTA"), _model) ?? new();
 
         if (response.IsSuccessStatusCode)
         {
@@ -62,5 +62,14 @@ public partial class EstadoCuentaInfo : ComponentBase
             return;
         }
         SnackBar.Add("Ocurrió un error al actualizar el registro", Severity.Error);
+    }
+
+    private void CalcularTotalMeses()
+    {
+        if (_edit)
+        {
+            var mesXAnio = _model.EstadoCuenta.Anio * 12;
+            _model.EstadoCuenta.TotalMeses = mesXAnio + _model.EstadoCuenta.Meses;
+        }
     }
 }

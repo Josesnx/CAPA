@@ -24,7 +24,9 @@
                         <MudSelectItem Value="@tarifa.IdTarifa">@tarifa.Tipo</MudSelectItem>
                     }
                 </MudSelect>
-                <MudNumericField Label="Cantidad" Class="mt-3" HelperText="Requerido"
+                <MudNumericField Label="Meses" Class="mt-3" HelperText="Requerido" TextChanged="CalcularCantidadNMeses"
+                                 @bind-Value="_model.Cuenta.EstadoCuenta.Meses" For="@(() => _model.Cuenta.EstadoCuenta.Meses)" Format="N0" Margin="Margin.Dense" />
+                <MudNumericField Label="Cantidad" Class="mt-3" HelperText="Requerido" ReadOnly="true" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AttachMoney"
                                  @bind-Value="_model.Cantidad" For="@(() => _model.Cantidad)" Format="N2" Margin="Margin.Dense" />
                 <MudCardActions>
                     <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" Size="Size.Medium">Pagar</MudButton>

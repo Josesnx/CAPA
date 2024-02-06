@@ -2,6 +2,7 @@
 using Client.Data.Herramienta;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using System.Text.Json;
 
 namespace Client.Pages.Recibo;
 
@@ -20,6 +21,7 @@ public partial class PagoAdd : ComponentBase
     private readonly ReciboViewModel _model = new();
     private TarifaViewModel _tarifa = new();
     private List<UsuarioViewModel> _listUsuario = new();
+    private List<CuentaViewModel> _listCuenta = new();
     private List<TarifaViewModel> _listTarifa = new();
     private DateTime? _fecha = DateTime.Now;
 
@@ -28,11 +30,18 @@ public partial class PagoAdd : ComponentBase
         _model.Cuenta = new CuentaViewModel()
         {
             Usuario = new UsuarioViewModel(),
-            Tarifa = new TarifaViewModel()
+            Tarifa = new TarifaViewModel(),
+            EstadoCuenta = new EstadoCuentaViewModel() { Meses = 1 }
         };
 
-        var apiResponseU = await Http!.GetFromJsonAsync<ApiResponseViewModel<UsuarioViewModel>>(_url + "USUARIOS") ?? new();
+        var apiResponseC = await Http!.GetFromJsonAsync<ApiResponseViewModel<CuentaViewModel>>(_url + "CUENTA") ?? new();
+        var apiResponseU = await Http!.GetFromJsonAsync<ApiResponseViewModel<UsuarioViewModel>>(_url + "CUENTA") ?? new();
         _listUsuario = apiResponseU.Items;
+        _listCuenta = apiResponseC.Items;
+        foreach (var cuenta in _listCuenta)
+        {
+            cuenta.Usuario = _listUsuario.Find(u => u.IdUsuario == cuenta.IdUsuario)!;
+        }
         var apiResponseT = await Http!.GetFromJsonAsync<ApiResponseViewModel<TarifaViewModel>>(_url + "TARIFA") ?? new();
         _listTarifa = apiResponseT.Items;
     }
@@ -40,16 +49,24 @@ public partial class PagoAdd : ComponentBase
     protected async Task SavePagoAsync()
     {
         _model.Fecha = _fecha!.Value;
+
+        var cuenta = _listCuenta.Find(c => _listUsuario.Exists(u => u.IdUsuario == c.IdUsuario));
+        if (cuenta != null)
+        {
+            _model.Cuenta.IdCuenta = cuenta.IdCuenta;
+        }
+
         var parametroPago = new Dictionary<string, object?>
         {
-            { "Nombre", _model.Cuenta.IdCuenta },
-            { "Nombre", _model.NoRecibo },
-            { "ApellidoPaterno", _model.Fecha },
-            { "ApellidoMaterno", _model.Cantidad }
+            { "IdCuenta", _model.Cuenta.IdCuenta },
+            { "NoRecibo", _model.NoRecibo },
+            { "Fecha", _model.Fecha.ToString("dd-MM-yyyy") },
+            { "Cantidad", _model.Cantidad },
+            { "Meses", _model.Cuenta.EstadoCuenta.Meses }
         };
 
-        var response = await Http!.PostAsJsonAsync(Tool.GenerateQueryString(parametroPago!, _url + "RECIBO"), _model) ?? new();
-
+        //var response = await Http!.PostAsJsonAsync(Tool.GenerateQueryString(parametroPago!, _url + "RECIBO"), _model) ?? new();
+        var response = await Http!.PostAsJsonAsync("https://apex.oracle.com/pls/apex/capa/SFA/RECIBO", _model) ?? new();
         if (response.IsSuccessStatusCode)
         {
             SnackBar.Add("Registrado exitosamente", Severity.Success);
@@ -66,13 +83,11 @@ public partial class PagoAdd : ComponentBase
 
         if (int.TryParse(valor, out int idUsuario))
         {
-            //return _listUsuario.Where(u => u.IdUsuario == userId || u.NombreCompleto!.Contains(valor, StringComparison.InvariantCultureIgnoreCase));
             var isNull = _listUsuario.Where(u => u.IdUsuario == idUsuario || u.NombreCompleto!.Contains(valor, StringComparison.InvariantCultureIgnoreCase));
             return isNull.Any() ? isNull : _listUsuario;
         }
         else
         {
-            //return _listUsuario.Where(u => u.NombreCompleto!.Contains(valor, StringComparison.InvariantCultureIgnoreCase));
             var isNull = _listUsuario.Where(u => u.NombreCompleto!.Contains(valor, StringComparison.InvariantCultureIgnoreCase));
             return isNull.Any() ? isNull : _listUsuario;
         }
@@ -84,5 +99,12 @@ public partial class PagoAdd : ComponentBase
         _tarifa = apiResponseT.Items.FirstOrDefault()!;
 
         _model.Cantidad = _tarifa.Precio;
+
+        CalcularCantidadNMeses();
+    }
+
+    private void CalcularCantidadNMeses()
+    {
+        _model.Cantidad = _tarifa.Precio * _model.Cuenta.EstadoCuenta.Meses;
     }
 }

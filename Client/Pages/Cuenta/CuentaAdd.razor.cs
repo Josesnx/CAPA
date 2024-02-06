@@ -22,13 +22,13 @@ public partial class CuentaAdd : ComponentBase
     private List<UsuarioViewModel> _listUsuario = new();
     private List<TipoTomaViewModel> _listTipoToma = new();
     private List<TarifaViewModel> _listTarifa = new();
-    private bool _nuevaCuenta;
+    private bool _nuevaCuenta = false;
 
     protected override async Task OnInitializedAsync()
     {
         _expediente.TipoToma = new TipoTomaViewModel();
         _expediente.Usuario = new UsuarioViewModel();
-        _expediente.Cuenta = new CuentaViewModel() 
+        _expediente.Cuenta = new CuentaViewModel()
         {
             Tarifa = new TarifaViewModel(),
             EstadoCuenta = new EstadoCuentaViewModel()
@@ -52,11 +52,16 @@ public partial class CuentaAdd : ComponentBase
         var parametroCuenta = new Dictionary<string, object?>
         {
             { "IdUsuario", _expediente.Usuario.IdUsuario },
-            { "IdTipoToma", _expediente.TipoToma.IdTipoToma},
+            { "TipoToma", _expediente.TipoToma.Toma},
+            { "NoToma", _expediente.TipoToma.NoToma},
             { "IdTarifa", _expediente.Cuenta.Tarifa.IdTarifa},
             { "Contrato", _expediente.Contrato },
             { "Tarjeta", _expediente.Tarjeta },
-            { "NoSolicitud", _expediente.NoSolicitud }
+            { "NoSolicitud", _expediente.NoSolicitud },
+            { "NoSolicitud", _expediente.Cuenta.Total },
+            { "NoSolicitud", _expediente.Cuenta.EstadoCuenta.Anio },
+            { "NoSolicitud", _expediente.Cuenta.EstadoCuenta.Meses },
+            { "NoSolicitud", _expediente.Cuenta.EstadoCuenta.TotalMeses }
         };
 
         var response = await Http!.PostAsJsonAsync(Tool.GenerateQueryString(parametroCuenta!, _url + "CUENTA"), _expediente) ?? new();
