@@ -17,7 +17,10 @@ public partial class TarifaAdd : ComponentBase
     public ISnackbar SnackBar { get; set; } = null!;
 
     private readonly string _url = "https://apex.oracle.com/pls/apex/capa/SFA/";
-    private readonly TarifaViewModel _model = new();
+    private readonly TarifaViewModel _model = new()
+    {
+        Anio = DateTime.Now.Year
+    };
 
     private void NavigateToTarifaPage()
     {

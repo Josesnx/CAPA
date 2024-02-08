@@ -21,7 +21,7 @@
             @context.NoRecibo
         </MudTd>
         <MudTd DataLabel="Fecha">
-            @context.Fecha.ToString("dd/MM/yyyy")
+            @context.Fecha?.ToString("dd/MM/yyyy")
         </MudTd>
         <MudTd DataLabel="Cantidad">
             $ @context.Cantidad.ToString("N2")

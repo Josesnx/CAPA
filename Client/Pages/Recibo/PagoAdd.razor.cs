@@ -2,7 +2,6 @@
 using Client.Data.Herramienta;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using System.Text.Json;
 
 namespace Client.Pages.Recibo;
 
@@ -23,10 +22,10 @@ public partial class PagoAdd : ComponentBase
     private List<UsuarioViewModel> _listUsuario = new();
     private List<CuentaViewModel> _listCuenta = new();
     private List<TarifaViewModel> _listTarifa = new();
-    private DateTime? _fecha = DateTime.Now;
 
     protected override async Task OnInitializedAsync()
     {
+        _model.Fecha = DateTime.Now;
         _model.Cuenta = new CuentaViewModel()
         {
             Usuario = new UsuarioViewModel(),
@@ -48,8 +47,6 @@ public partial class PagoAdd : ComponentBase
 
     protected async Task SavePagoAsync()
     {
-        _model.Fecha = _fecha!.Value;
-
         var cuenta = _listCuenta.Find(c => _listUsuario.Exists(u => u.IdUsuario == c.IdUsuario));
         if (cuenta != null)
         {
@@ -60,13 +57,12 @@ public partial class PagoAdd : ComponentBase
         {
             { "IdCuenta", _model.Cuenta.IdCuenta },
             { "NoRecibo", _model.NoRecibo },
-            { "Fecha", _model.Fecha.ToString("dd-MM-yyyy") },
+            { "Fecha", _model.Fecha!.Value.ToString("dd-MM-yyyy") },
             { "Cantidad", _model.Cantidad },
             { "Meses", _model.Cuenta.EstadoCuenta.Meses }
         };
 
-        //var response = await Http!.PostAsJsonAsync(Tool.GenerateQueryString(parametroPago!, _url + "RECIBO"), _model) ?? new();
-        var response = await Http!.PostAsJsonAsync("https://apex.oracle.com/pls/apex/capa/SFA/RECIBO", _model) ?? new();
+        var response = await Http!.PostAsJsonAsync(Tool.GenerateQueryString(parametroPago!, _url + "RECIBO"), _tarifa) ?? new();
         if (response.IsSuccessStatusCode)
         {
             SnackBar.Add("Registrado exitosamente", Severity.Success);
@@ -75,9 +71,8 @@ public partial class PagoAdd : ComponentBase
         SnackBar.Add("Ocurrió un error al realizar el pago", Severity.Error);
     }
 
-    private async Task<IEnumerable<UsuarioViewModel>> SearchUsuarios(string valor)
+    private async Task<IEnumerable<UsuarioViewModel>> SearchCuentas(string valor)
     {
-
         if (string.IsNullOrEmpty(valor))
             return _listUsuario;
 

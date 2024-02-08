@@ -9,7 +9,7 @@ public class TarifaViewModel
     public string? Tipo { get; set; }
 
     [JsonPropertyName("añotarifa")]
-    public string? Anio { get; set; }
+    public int Anio { get; set; }
 
     public decimal Precio { get; set; }
 

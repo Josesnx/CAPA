@@ -16,9 +16,9 @@
                         <MudTextField Label="Tipo" HelperText="Requerido"
                                       @bind-Value="_model.Tipo" For="@(() => _model.Tipo)" />
                         <MudNumericField Label="Año" Class="mt-3" HelperText="Requerido"
-                                         @bind-Value="_model.Anio" For="@(() => _model.Anio)" Format="N0" />
+                                         @bind-Value="_model.Anio" For="@(() => _model.Anio)" Format="F0" Max="3000"/>
                         <MudNumericField Label="Precio" Class="mt-3" HelperText="Requerido"
-                                         @bind-Value="_model.Precio" For="@(() => _model.Precio)" Format="N2" />
+                                         @bind-Value="_model.Precio" For="@(() => _model.Precio)" Format="N2" Min="0"/>
                     </MudCardContent>
                 </MudCard>
             </MudItem>

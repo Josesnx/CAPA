@@ -10,7 +10,7 @@ public class ReciboViewModel
 
     public string? NoRecibo { get; set; }
 
-    public DateTime Fecha { get; set; }
+    public DateTime? Fecha { get; set; }
 
     public decimal Cantidad { get; set; }
 }

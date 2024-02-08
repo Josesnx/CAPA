@@ -22,7 +22,7 @@ public partial class CuentaAdd : ComponentBase
     private List<UsuarioViewModel> _listUsuario = new();
     private List<TipoTomaViewModel> _listTipoToma = new();
     private List<TarifaViewModel> _listTarifa = new();
-    private bool _nuevaCuenta = false;
+    private bool _nuevaCuenta = true;
 
     protected override async Task OnInitializedAsync()
     {
@@ -34,7 +34,7 @@ public partial class CuentaAdd : ComponentBase
             EstadoCuenta = new EstadoCuentaViewModel()
         };
 
-        var apiResponseU = await Http!.GetFromJsonAsync<ApiResponseViewModel<UsuarioViewModel>>(_url + "USUARIOS") ?? new();
+        var apiResponseU = await Http!.GetFromJsonAsync<ApiResponseViewModel<UsuarioViewModel>>(_url + "USUARIO_SIN_C") ?? new();
         _listUsuario = apiResponseU.Items;
         var apiResponseTt = await Http!.GetFromJsonAsync<ApiResponseViewModel<TipoTomaViewModel>>(_url + "TIPO_TOMA") ?? new();
         _listTipoToma = apiResponseTt.Items;
@@ -52,16 +52,16 @@ public partial class CuentaAdd : ComponentBase
         var parametroCuenta = new Dictionary<string, object?>
         {
             { "IdUsuario", _expediente.Usuario.IdUsuario },
-            { "TipoToma", _expediente.TipoToma.Toma},
+            { "Toma", _expediente.TipoToma.Toma},
             { "NoToma", _expediente.TipoToma.NoToma},
             { "IdTarifa", _expediente.Cuenta.Tarifa.IdTarifa},
             { "Contrato", _expediente.Contrato },
             { "Tarjeta", _expediente.Tarjeta },
             { "NoSolicitud", _expediente.NoSolicitud },
-            { "NoSolicitud", _expediente.Cuenta.Total },
-            { "NoSolicitud", _expediente.Cuenta.EstadoCuenta.Anio },
-            { "NoSolicitud", _expediente.Cuenta.EstadoCuenta.Meses },
-            { "NoSolicitud", _expediente.Cuenta.EstadoCuenta.TotalMeses }
+            { "Total", _expediente.Cuenta.Total },
+            { "Anio", _expediente.Cuenta.EstadoCuenta.Anio },
+            { "Meses", _expediente.Cuenta.EstadoCuenta.Meses },
+            { "TotalMeses", _expediente.Cuenta.EstadoCuenta.TotalMeses }
         };
 
         var response = await Http!.PostAsJsonAsync(Tool.GenerateQueryString(parametroCuenta!, _url + "CUENTA"), _expediente) ?? new();

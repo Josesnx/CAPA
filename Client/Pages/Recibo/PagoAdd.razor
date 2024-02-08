@@ -8,13 +8,13 @@
         <MudCard>
             <MudCardContent>
                 <MudText Typo="Typo.h5">Realizar pago</MudText>
-                <MudAutocomplete T="UsuarioViewModel" Label="Usuarios" @bind-Value="_model.Cuenta.Usuario"
-                                 SearchFunc="@SearchUsuarios" ToStringFunc="@(e => e == null ? null : e.NombreCompleto)"
+                <MudAutocomplete T="UsuarioViewModel" Label="Cuentas" @bind-Value="_model.Cuenta.Usuario"
+                                 SearchFunc="@SearchCuentas" ToStringFunc="@(e => e == null ? null : e.NombreCompleto)"
                                  For="@(() => _model.Cuenta.Usuario)" HelperText="Requerido"
-                                 Strict="false" CoerceValue="true" ResetValueOnEmptyText="true" Margin="Margin.Dense" />
+                                 Strict="false" ResetValueOnEmptyText="true" Margin="Margin.Dense" />
                 <MudTextField Label="No. Recibo" HelperText="Requerido"
                               @bind-Value="_model.NoRecibo" For="@(() => _model.NoRecibo)" Margin="Margin.Dense" />
-                <MudDatePicker Label="Fecha" @bind-Date="_fecha" DisableToolbar="true" HelperText="Requerido" />
+                <MudDatePicker Label="Fecha" @bind-Date="_model.Fecha" DisableToolbar="true" HelperText="Requerido" />
                 <MudSelect T="int" AnchorOrigin="Origin.BottomCenter"
                            @bind-Value="_model.Cuenta.Tarifa.IdTarifa" For="@(() => _model.Cuenta.Tarifa.IdTarifa)"
                            HelperText="Requerido" SelectedValuesChanged="CalcularCantidad" Margin="Margin.Dense">

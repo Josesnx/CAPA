@@ -33,7 +33,14 @@ public partial class ReciboList : ComponentBase
     {
         try
         {
-            var apiResponse = await Http!.GetFromJsonAsync<ApiResponseViewModel<ReciboViewModel>>(_url + $"RECIBO?IdCuenta={IdCuenta}") ?? new();
+            var parametrosPaginacion = new Dictionary<string, object?>
+            {
+                { "IdCuenta", IdCuenta },
+                { "CurrentPage", tableState.Page + 1 },
+                { "PageSize", tableState.PageSize }
+            };
+
+            var apiResponse = await Http!.GetFromJsonAsync<ApiResponseViewModel<ReciboViewModel>>(Tool.GenerateQueryString(parametrosPaginacion!, _url + "RECIBO")) ?? new();
             _recibo = apiResponse.Items;
             foreach (var recibo in _recibo)
             {
