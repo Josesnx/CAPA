@@ -1,6 +1,5 @@
 ﻿@page "/Recibo/{IdCuenta:int}"
 @using Client.Data
-@attribute [Authorize]
 
 <MudTable UserAttributes="@(new Dictionary<string, object> {{"id","tblRecibos"}})" ServerData="@(new Func<TableState, Task<TableData<ReciboViewModel>>>(GetReciboAsync))"
           Bordered="true"

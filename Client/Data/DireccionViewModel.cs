@@ -1,4 +1,7 @@
-﻿namespace Client.Data;
+﻿using Client.Data.Herramienta;
+using System.Text.Json.Serialization;
+
+namespace Client.Data;
 
 public class DireccionViewModel
 {
@@ -10,10 +13,16 @@ public class DireccionViewModel
 
     public int IdTipoVialidad { get; set; }
 
+    [JsonPropertyName("usuario")]
+    [JsonConverter(typeof(ConvertirJson<UsuarioViewModel>))]
     public UsuarioViewModel Usuario { get; set; }
 
+    [JsonPropertyName("colonia")]
+    [JsonConverter(typeof(ConvertirJson<ColoniaViewModel>))]
     public ColoniaViewModel Colonia { get; set; }
 
+    [JsonPropertyName("tipovialidad")]
+    [JsonConverter(typeof(ConvertirJson<TipoVialidadViewModel>))]
     public TipoVialidadViewModel TipoVialidad { get; set; }
 
     public string? Calle { get; set; }

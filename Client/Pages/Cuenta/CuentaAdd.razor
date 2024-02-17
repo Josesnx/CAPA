@@ -1,5 +1,4 @@
 ﻿@page "/Cuenta/Add"
-@attribute [Authorize]
 @using Client.Data
 
 <MudCard Elevation="4">
@@ -53,7 +52,7 @@
                     <MudCard>
                         <MudCardContent>
                             <MudText Typo="Typo.subtitle1">Estado de Cuenta</MudText>
-                            <MudCheckBox @bind-Value="@_nuevaCuenta" Color="Color.Warning" CheckedIcon="@Icons.Material.Filled.RemoveRedEye" UncheckedIcon="@Icons.Material.Outlined.RemoveRedEye"></MudCheckBox>
+                            <MudCheckBox @bind-Value="_nuevaCuenta" Color="Color.Warning" CheckedIcon="@Icons.Material.Filled.RemoveRedEye" UncheckedIcon="@Icons.Material.Outlined.RemoveRedEye"></MudCheckBox>
                             <MudNumericField Label="Año" Class="mt-3" HelperText="Requerido" Disabled="_nuevaCuenta"
                                              @bind-Value="_expediente.Cuenta.EstadoCuenta.Anio" For="@(() => _expediente.Cuenta.EstadoCuenta.Anio)" Format="N0" />
                             <MudNumericField Label="Meses" Class="mt-3" HelperText="Requerido" Disabled="_nuevaCuenta"

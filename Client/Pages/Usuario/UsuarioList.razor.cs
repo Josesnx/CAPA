@@ -22,44 +22,25 @@ public partial class UsuarioList : ComponentBase
     private const string _url = "https://apex.oracle.com/pls/apex/capa/SFA/";
     private MudTable<DireccionViewModel> _usuarioTable = null!;
     protected List<DireccionViewModel> _direccion = new();
-    protected List<UsuarioViewModel> _usuario = new();
-    protected List<ColoniaViewModel> _colonia = new();
-    protected List<MunicipioViewModel> _municipio = new();
-    protected List<EstadoViewModel> _estado = new();
     private readonly int[] _pageSizeOptions = { 10, 20, 30, 40, 50 };
     private readonly string _infoFormat = "{first_item}-{last_item} de {all_items}";
     private bool _checkbox;
+    private string? _searchString;
 
     private async Task<TableData<DireccionViewModel>> GetUsuarioAsync(TableState tableState)
     {
         try
         {
-            var apiResponse = await Http!.GetFromJsonAsync<ApiResponseViewModel<DireccionViewModel>>(_url + "USUARIOS") ?? new();
-            var apiResponseU = await Http!.GetFromJsonAsync<ApiResponseViewModel<UsuarioViewModel>>(_url + "USUARIOS") ?? new();
-            var apiResponseC = await Http!.GetFromJsonAsync<ApiResponseViewModel<ColoniaViewModel>>(_url + "USUARIOS") ?? new();
-            var apiResponseM = await Http!.GetFromJsonAsync<ApiResponseViewModel<MunicipioViewModel>>(_url + "USUARIOS") ?? new();
-            var apiResponseE = await Http!.GetFromJsonAsync<ApiResponseViewModel<EstadoViewModel>>(_url + "USUARIOS") ?? new();
-            _direccion = apiResponse.Items;
-            _usuario = apiResponseU.Items;
-            _colonia = apiResponseC.Items;
-            _municipio = apiResponseM.Items;
-            _estado = apiResponseE.Items;
-
-            foreach (var direccion in _direccion)
+            var parametrosPaginacion = new Dictionary<string, object?>
             {
-                direccion.Usuario = _usuario.Find(u => u.IdUsuario == direccion.IdUsuario)!;
-                direccion.Colonia = _colonia.Find(c => c.IdColonia == direccion.IdColonia)!;
+                { "Buscar", _searchString },
+                { "CurrentPage", tableState.Page + 1 },
+                { "PageSize", tableState.PageSize }
+            };
 
-                if (direccion.Colonia != null)
-                {
-                    direccion.Colonia.Municipio = _municipio.Find(m => m.IdMunicipio == direccion.Colonia.IdMunicipio)!;
-
-                    if (direccion.Colonia.Municipio != null)
-                    {
-                        direccion.Colonia.Municipio.Estado = _estado.Find(e => e.IdEstado == direccion.Colonia.Municipio.IdEstado)!;
-                    }
-                }
-            }
+            var apiResponse = await Http!.GetFromJsonAsync<ApiResponseViewModel<DireccionViewModel>>
+                (Tool.GenerateQueryString(parametrosPaginacion!, _url + "USUARIOS")) ?? new();
+            _direccion = apiResponse.Items;
 
             return new TableData<DireccionViewModel>
             {
@@ -84,8 +65,14 @@ public partial class UsuarioList : ComponentBase
         Navigator.NavigateTo("/Usuario/Add");
     }
 
-    private async void NavigateToEditUsuarioPage(DireccionViewModel model)
+    private void NavigateToEditUsuarioPage(DireccionViewModel model)
     {
         Navigator.NavigateTo($"/Usuario/Edit/{model.Usuario.IdUsuario}");
+    }
+
+    private void OnSearch(string text)
+    {
+        _searchString = text;
+        _usuarioTable.ReloadServerData();
     }
 }

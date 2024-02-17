@@ -1,5 +1,4 @@
 ﻿@page "/Expediente/{IdExpediente:int}"
-@attribute [Authorize]
 
 <MudCard Elevation="4">
     <EditForm Model="@_model" OnValidSubmit="EditExpedienteAsync">

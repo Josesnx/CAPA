@@ -17,8 +17,7 @@ public partial class UsuarioAdd : ComponentBase
     public ISnackbar SnackBar { get; set; } = null!;
 
     private readonly string _url = "https://apex.oracle.com/pls/apex/capa/SFA/";
-    private readonly UsuarioViewModel _model = new();
-    private readonly DireccionViewModel _modelDireccion = new();
+    private readonly DireccionViewModel _model = new();
     private List<EstadoViewModel> _listEstado = new();
     private List<MunicipioViewModel> _listMunicipio = new();
     private List<ColoniaViewModel> _listColonia = new();
@@ -26,8 +25,9 @@ public partial class UsuarioAdd : ComponentBase
 
     protected override async Task OnInitializedAsync()
     {
-        _modelDireccion.TipoVialidad = new TipoVialidadViewModel();
-        _modelDireccion.Colonia = new ColoniaViewModel
+        _model.Usuario = new UsuarioViewModel();
+        _model.TipoVialidad = new TipoVialidadViewModel();
+        _model.Colonia = new ColoniaViewModel
         {
             Municipio = new MunicipioViewModel()
             {
@@ -51,21 +51,21 @@ public partial class UsuarioAdd : ComponentBase
     {
         var parametroUsuario = new Dictionary<string, object?>
         {
-            { "Nombre", _model.Nombre },
-            { "ApellidoPaterno", _model.ApellidoPaterno },
-            { "ApellidoMaterno", _model.ApellidoMaterno },
-            { "CURP", _model.Curp },
-            { "RFC", _model.Rfc },
-            { "Telefono", _model.Telefono },
-            { "TelefonoFijo", _model.TelefonoFijo },
-            { "Correo", _model.Correo },
-            { "IdColonia", _modelDireccion.Colonia.IdColonia },
-            { "IdVialidad", _modelDireccion.TipoVialidad.IdTipoVialidad },
-            { "Calle", _modelDireccion.Calle },
-            { "NumeroInterior", _modelDireccion.NumeroInterior },
-            { "NumeroExterior", _modelDireccion.NumeroExterior },
-            { "Calle1", _modelDireccion.Calle1 },
-            { "Calle2", _modelDireccion.Calle2}
+            { "Nombre", _model.Usuario.Nombre },
+            { "ApellidoPaterno", _model.Usuario.ApellidoPaterno },
+            { "ApellidoMaterno", _model.Usuario.ApellidoMaterno },
+            { "CURP", _model.Usuario.Curp },
+            { "RFC", _model.Usuario.Rfc },
+            { "Telefono", _model.Usuario.Telefono },
+            { "TelefonoFijo", _model.Usuario.TelefonoFijo },
+            { "Correo", _model.Usuario.Correo },
+            { "IdColonia", _model.Colonia.IdColonia },
+            { "IdVialidad", _model.TipoVialidad.IdTipoVialidad },
+            { "Calle", _model.Calle },
+            { "NumeroInterior", _model.NumeroInterior },
+            { "NumeroExterior", _model.NumeroExterior },
+            { "Calle1", _model.Calle1 },
+            { "Calle2", _model.Calle2}
         };
 
         var response = await Http!.PostAsJsonAsync(Tool.GenerateQueryString(parametroUsuario!, _url + "USUARIOS"), _model) ?? new();
@@ -81,13 +81,13 @@ public partial class UsuarioAdd : ComponentBase
 
     protected async Task GetMunicipioXEstado()
     {
-        ApiResponseViewModel<MunicipioViewModel> apiResponse = await Http!.GetFromJsonAsync<ApiResponseViewModel<MunicipioViewModel>>(_url + $"CAT_M?IdEstado={_modelDireccion.Colonia.Municipio.Estado.IdEstado}") ?? new();
+        ApiResponseViewModel<MunicipioViewModel> apiResponse = await Http!.GetFromJsonAsync<ApiResponseViewModel<MunicipioViewModel>>(_url + $"CAT_M?IdEstado={_model.Colonia.Municipio.Estado.IdEstado}") ?? new();
         _listMunicipio = apiResponse.Items;
     }
 
     protected async Task GetColoniaXMunicipio()
     {
-        ApiResponseViewModel<ColoniaViewModel> apiResponse = await Http!.GetFromJsonAsync<ApiResponseViewModel<ColoniaViewModel>>(_url + $"CAT_C?IdMunicipio={_modelDireccion.Colonia.Municipio.IdMunicipio}") ?? new();
+        ApiResponseViewModel<ColoniaViewModel> apiResponse = await Http!.GetFromJsonAsync<ApiResponseViewModel<ColoniaViewModel>>(_url + $"CAT_C?IdMunicipio={_model.Colonia.Municipio.IdMunicipio}") ?? new();
         _listColonia = apiResponse.Items;
     }
 }

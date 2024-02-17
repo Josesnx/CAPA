@@ -28,7 +28,7 @@ public class ExpedienteValidator : AbstractValidator<ExpedienteViewModel>
            .NotEmpty().WithMessage("El campo No Solicitud es requerido");
 
         RuleFor(e => e.Cuenta.Total)
-           .NotEmpty().WithMessage("El campo Total es requerido");
+       .NotEmpty().WithMessage("El campo Total es requerido");
 
         RuleFor(e => e.Cuenta.EstadoCuenta.Anio)
            .NotEmpty().WithMessage("El campo Año es requerido");

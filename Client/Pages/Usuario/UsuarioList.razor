@@ -9,9 +9,14 @@
         <MudIconButton UserAttributes="@(new Dictionary<string, object> {{"id","btnNew"}})" Icon="@Icons.Material.Outlined.AddCircleOutline" Size="Size.Medium"
                        @onclick="NavigateToAddUsuarioPage" Color="Color.Primary"></MudIconButton>
         <MudCheckBox @bind-Value="@_checkbox" Color="Color.Warning" CheckedIcon="@Icons.Material.Filled.RemoveRedEye" UncheckedIcon="@Icons.Material.Outlined.RemoveRedEye"></MudCheckBox>
+        <MudSpacer />
+        <MudTextField UserAttributes="@(new Dictionary<string, object> {{"id","txtSearchBox"}})" T="string" ValueChanged="@(OnSearch)" Placeholder="Buscar"
+                      Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search"
+                      IconSize="Size.Medium" Class="mt-0"></MudTextField>
     </ToolBarContent>
     <HeaderContent>
         <MudTh>Editar</MudTh>
+        <MudTh>ID</MudTh>
         <MudTh>Nombre</MudTh>
         <MudTh>CURP</MudTh>
         <MudTh>RFC</MudTh>
@@ -30,6 +35,9 @@
         <MudTd DataLabel="Editar" Style="text-align: center">
             <MudIconButton UserAttributes="@(new Dictionary<string, object> {{"id","btnEdit"}})" Icon="@Icons.Material.Filled.Edit" Color="Color.Primary"
                            @onclick="()=> NavigateToEditUsuarioPage(context)" Size="Size.Medium"></MudIconButton>
+        </MudTd>
+        <MudTd DataLabel="Nombre">
+            @context.Usuario.IdUsuario
         </MudTd>
         <MudTd DataLabel="Nombre">
             @context.Usuario.NombreCompleto

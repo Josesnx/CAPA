@@ -18,7 +18,6 @@ public partial class CuentaAdd : ComponentBase
 
     private readonly string _url = "https://apex.oracle.com/pls/apex/capa/SFA/";
     private readonly ExpedienteViewModel _expediente = new();
-    private UsuarioViewModel _usuario = new();
     private List<UsuarioViewModel> _listUsuario = new();
     private List<TipoTomaViewModel> _listTipoToma = new();
     private List<TarifaViewModel> _listTarifa = new();
@@ -83,13 +82,11 @@ public partial class CuentaAdd : ComponentBase
 
         if (int.TryParse(valor, out int idUsuario))
         {
-            //return _listUsuario.Where(u => u.IdUsuario == userId || u.NombreCompleto!.Contains(valor, StringComparison.InvariantCultureIgnoreCase));
             var isNull = _listUsuario.Where(u => u.IdUsuario == idUsuario || u.NombreCompleto!.Contains(valor, StringComparison.InvariantCultureIgnoreCase));
             return isNull.Any() ? isNull : _listUsuario;
         }
         else
         {
-            //return _listUsuario.Where(u => u.NombreCompleto!.Contains(valor, StringComparison.InvariantCultureIgnoreCase));
             var isNull = _listUsuario.Where(u => u.NombreCompleto!.Contains(valor, StringComparison.InvariantCultureIgnoreCase));
             return isNull.Any() ? isNull : _listUsuario;
         }

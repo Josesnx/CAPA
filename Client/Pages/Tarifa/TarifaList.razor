@@ -8,7 +8,7 @@
         <MudText Typo="Typo.h6">Tarifas</MudText>
         <MudIconButton UserAttributes="@(new Dictionary<string, object> {{"id","btnNew"}})" Icon="@Icons.Material.Outlined.AddCircleOutline" Size="Size.Medium"
                        @onclick="NavigateToAddTarifaPage" Color="Color.Primary"></MudIconButton>
-        <MudCheckBox @bind-Value="@_checkbox" Color="Color.Warning" CheckedIcon="@Icons.Material.Filled.RemoveRedEye" UncheckedIcon="@Icons.Material.Outlined.RemoveRedEye"></MudCheckBox>
+        <MudCheckBox Value="_checkbox" ValueChanged="@((bool v) => Inactivos(v))" Color="Color.Warning" CheckedIcon="@Icons.Material.Filled.DisabledVisible" UncheckedIcon="@Icons.Material.Outlined.DisabledVisible"></MudCheckBox>
     </ToolBarContent>
     <HeaderContent>
         <MudTh>Editar</MudTh>
@@ -33,7 +33,7 @@
         </MudTd>
         <MudTd DataLabel="Inactivar" Style="text-align: center">
             <MudIconButton UserAttributes="@(new Dictionary<string, object> {{"id","btnDelete"}})" Icon="@Icons.Material.Filled.HideSource" Color="Color.Error"
-                           @onclick="() => DeleteTarifaAsync(context)" Size="Size.Medium"></MudIconButton>
+                           @onclick="() => DeleteTarifaAsync(context)" Size="Size.Medium" Disabled="@IsDisabled(context.Estatus)"></MudIconButton>
         </MudTd>
     </RowTemplate>
     <NoRecordsContent>

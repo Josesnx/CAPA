@@ -19,8 +19,7 @@ public partial class PagoAdd : ComponentBase
     private readonly string _url = "https://apex.oracle.com/pls/apex/capa/SFA/";
     private readonly ReciboViewModel _model = new();
     private TarifaViewModel _tarifa = new();
-    private List<UsuarioViewModel> _listUsuario = new();
-    private List<CuentaViewModel> _listCuenta = new();
+    private List<ExpedienteViewModel> _listExpediente = new();
     private List<TarifaViewModel> _listTarifa = new();
 
     protected override async Task OnInitializedAsync()
@@ -33,24 +32,18 @@ public partial class PagoAdd : ComponentBase
             EstadoCuenta = new EstadoCuentaViewModel() { Meses = 1 }
         };
 
-        var apiResponseC = await Http!.GetFromJsonAsync<ApiResponseViewModel<CuentaViewModel>>(_url + "CUENTA") ?? new();
-        var apiResponseU = await Http!.GetFromJsonAsync<ApiResponseViewModel<UsuarioViewModel>>(_url + "CUENTA") ?? new();
-        _listUsuario = apiResponseU.Items;
-        _listCuenta = apiResponseC.Items;
-        foreach (var cuenta in _listCuenta)
-        {
-            cuenta.Usuario = _listUsuario.Find(u => u.IdUsuario == cuenta.IdUsuario)!;
-        }
-        var apiResponseT = await Http!.GetFromJsonAsync<ApiResponseViewModel<TarifaViewModel>>(_url + "TARIFA") ?? new();
+        var apiResponse = await Http!.GetFromJsonAsync<ApiResponseViewModel<ExpedienteViewModel>>(_url + "CUENTA") ?? new();
+        _listExpediente = apiResponse.Items;
+        var apiResponseT = await Http!.GetFromJsonAsync<ApiResponseViewModel<TarifaViewModel>>(_url + "TARIFA?Estatus=1") ?? new();
         _listTarifa = apiResponseT.Items;
     }
 
     protected async Task SavePagoAsync()
     {
-        var cuenta = _listCuenta.Find(c => _listUsuario.Exists(u => u.IdUsuario == c.IdUsuario));
-        if (cuenta != null)
+        var expediente = _listExpediente.Find(e => e.Usuario.IdUsuario == _model.Cuenta.Usuario.IdUsuario);
+        if (expediente != null)
         {
-            _model.Cuenta.IdCuenta = cuenta.IdCuenta;
+            _model.Cuenta.IdCuenta = expediente.Cuenta.IdCuenta;
         }
 
         var parametroPago = new Dictionary<string, object?>
@@ -74,17 +67,17 @@ public partial class PagoAdd : ComponentBase
     private async Task<IEnumerable<UsuarioViewModel>> SearchCuentas(string valor)
     {
         if (string.IsNullOrEmpty(valor))
-            return _listUsuario;
+            return _listExpediente.Select(u => u.Usuario);
 
         if (int.TryParse(valor, out int idUsuario))
         {
-            var isNull = _listUsuario.Where(u => u.IdUsuario == idUsuario || u.NombreCompleto!.Contains(valor, StringComparison.InvariantCultureIgnoreCase));
-            return isNull.Any() ? isNull : _listUsuario;
+            var isNull = _listExpediente.Where(u => u.Usuario.IdUsuario == idUsuario || u.Usuario.NombreCompleto!.Contains(valor, StringComparison.InvariantCultureIgnoreCase)).Select(u => u.Usuario);
+            return isNull.Any() ? isNull : _listExpediente.Select(u => u.Usuario);
         }
         else
         {
-            var isNull = _listUsuario.Where(u => u.NombreCompleto!.Contains(valor, StringComparison.InvariantCultureIgnoreCase));
-            return isNull.Any() ? isNull : _listUsuario;
+            var isNull = _listExpediente.Where(u => u.Usuario.NombreCompleto!.Contains(valor, StringComparison.InvariantCultureIgnoreCase)).Select(u => u.Usuario);
+            return isNull.Any() ? isNull : _listExpediente.Select(u => u.Usuario);
         }
     }
 

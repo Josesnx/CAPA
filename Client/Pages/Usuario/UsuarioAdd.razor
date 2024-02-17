@@ -1,5 +1,4 @@
 ﻿@page "/Usuario/Add"
-@attribute [Authorize]
 
 <MudCard Elevation="4">
     <EditForm Model="@_model" OnValidSubmit="SaveUsuarioAsync">
@@ -15,21 +14,21 @@
                     <MudCard>
                         <MudCardContent>
                             <MudTextField Label="Nombre" HelperText="Requerido"
-                                          @bind-Value="_model.Nombre" For="@(() => _model.Nombre)" />
+                                          @bind-Value="_model.Usuario.Nombre" For="@(() => _model.Usuario.Nombre)" />
                             <MudTextField Label="Apellido Paterno" HelperText="Requerido" Class="mt-3"
-                                          @bind-Value="_model.ApellidoPaterno" For="@(() => _model.ApellidoPaterno)" />
+                                          @bind-Value="_model.Usuario.ApellidoPaterno" For="@(() => _model.Usuario.ApellidoPaterno)" />
                             <MudTextField Label="Apellido Materno" HelperText="Requerido" Class="mt-3"
-                                          @bind-Value="_model.ApellidoMaterno" For="@(() => _model.ApellidoMaterno)" />
+                                          @bind-Value="_model.Usuario.ApellidoMaterno" For="@(() => _model.Usuario.ApellidoMaterno)" />
                             <MudTextField Label="CURP" HelperText="Requerido" Class="mt-3"
-                                          @bind-Value="_model.Curp" For="@(() => _model.Curp)" />
+                                          @bind-Value="_model.Usuario.Curp" For="@(() => _model.Usuario.Curp)" />
                             <MudTextField Label="RFC" HelperText="Requerido" Class="mt-3"
-                                          @bind-Value="_model.Rfc" For="@(() => _model.Rfc)" />
+                                          @bind-Value="_model.Usuario.Rfc" For="@(() => _model.Usuario.Rfc)" />
                             <MudTextField Label="Teléfono" HelperText="Requerido" Class="mt-3"
-                                          @bind-Value="_model.Telefono" For="@(() => _model.Telefono)" />
+                                          @bind-Value="_model.Usuario.Telefono" For="@(() => _model.Usuario.Telefono)" />
                             <MudTextField Label="Teléfono Fijo" HelperText="Opcional" Class="mt-3"
-                                          @bind-Value="_model.TelefonoFijo" For="@(() => _model.TelefonoFijo)" />
+                                          @bind-Value="_model.Usuario.TelefonoFijo" For="@(() => _model.Usuario.TelefonoFijo)" />
                             <MudTextField Label="Correo" HelperText="Requerido" Class="mt-3"
-                                          @bind-Value="_model.Correo" For="@(() => _model.Correo)" />
+                                          @bind-Value="_model.Usuario.Correo" For="@(() => _model.Usuario.Correo)" />
                         </MudCardContent>
                     </MudCard>
                 </MudItem>
@@ -37,17 +36,17 @@
                     <MudCard>
                         <MudCardContent>
                             <MudTextField Label="Calle" HelperText="Requerido"
-                                          @bind-Value="_modelDireccion.Calle" For="@(() => _modelDireccion.Calle)" />
+                                          @bind-Value="_model.Calle" For="@(() => _model.Calle)" />
                             <MudTextField Label="Numero Interior" HelperText="Opcional"
-                                          @bind-Value="_modelDireccion.NumeroInterior" For="@(() => _modelDireccion.NumeroInterior)" />
+                                          @bind-Value="_model.NumeroInterior" For="@(() => _model.NumeroInterior)" />
                             <MudTextField Label="Numero Exterior" HelperText="Requerido"
-                                          @bind-Value="_modelDireccion.NumeroExterior" For="@(() => _modelDireccion.NumeroExterior)" />
+                                          @bind-Value="_model.NumeroExterior" For="@(() => _model.NumeroExterior)" />
                             <MudTextField Label="Calle 1" HelperText="Requerido"
-                                          @bind-Value="_modelDireccion.Calle1" For="@(() => _modelDireccion.Calle1)" />
+                                          @bind-Value="_model.Calle1" For="@(() => _model.Calle1)" />
                             <MudTextField Label="Calle 2" HelperText="Requerido"
-                                          @bind-Value="_modelDireccion.Calle2" For="@(() => _modelDireccion.Calle2)" />
-                            <MudSelect T="int" AnchorOrigin="Origin.BottomCenter"
-                                       @bind-Value="_modelDireccion.Colonia.Municipio.Estado.IdEstado" For="@(() => _modelDireccion.Colonia.Municipio.Estado.IdEstado)"
+                                          @bind-Value="_model.Calle2" For="@(() => _model.Calle2)" />
+                            <MudSelect T="int" AnchorOrigin="Origin.BottomCenter" Label="Estado"
+                                       @bind-Value="_model.Colonia.Municipio.Estado.IdEstado" For="@(() => _model.Colonia.Municipio.Estado.IdEstado)"
                                        SelectedValuesChanged="GetMunicipioXEstado" HelperText="Requerido">
                                 <MudSelectItem Value="0" Disabled="true">Estado</MudSelectItem>
                                 @foreach (var estado in _listEstado)
@@ -55,8 +54,8 @@
                                     <MudSelectItem Value="@estado.IdEstado">@estado.Nombre</MudSelectItem>
                                 }
                             </MudSelect>
-                            <MudSelect T="int" AnchorOrigin="Origin.BottomCenter"
-                                       @bind-Value="_modelDireccion.Colonia.Municipio.IdMunicipio" For="@(() => _modelDireccion.Colonia.Municipio.IdMunicipio)"
+                            <MudSelect T="int" AnchorOrigin="Origin.BottomCenter" Label="Municipio"
+                                       @bind-Value="_model.Colonia.Municipio.IdMunicipio" For="@(() => _model.Colonia.Municipio.IdMunicipio)"
                                        SelectedValuesChanged="GetColoniaXMunicipio" HelperText="Requerido">
                                 <MudSelectItem Value="0" Disabled="true">Municipio</MudSelectItem>
                                 @foreach (var municipio in _listMunicipio)
@@ -64,8 +63,8 @@
                                     <MudSelectItem Value="@municipio.IdMunicipio">@municipio.Nombre</MudSelectItem>
                                 }
                             </MudSelect>
-                            <MudSelect T="int" AnchorOrigin="Origin.BottomCenter"
-                                       @bind-Value="_modelDireccion.Colonia.IdColonia" For="@(() => _modelDireccion.Colonia.IdColonia)"
+                            <MudSelect T="int" AnchorOrigin="Origin.BottomCenter" Label="Colonia"
+                                       @bind-Value="_model.Colonia.IdColonia" For="@(() => _model.Colonia.IdColonia)"
                                        HelperText="Requerido">
                                 <MudSelectItem Value="0" Disabled="true">Colonia</MudSelectItem>
                                 @foreach (var colonia in _listColonia)
@@ -73,8 +72,8 @@
                                     <MudSelectItem Value="@colonia.IdColonia">@colonia.Nombre</MudSelectItem>
                                 }
                             </MudSelect>
-                            <MudSelect T="int" AnchorOrigin="Origin.BottomCenter"
-                                       @bind-Value="_modelDireccion.TipoVialidad.IdTipoVialidad" For="@(() => _modelDireccion.TipoVialidad.IdTipoVialidad)"
+                            <MudSelect T="int" AnchorOrigin="Origin.BottomCenter" Label="Tipo Vialidad"
+                                       @bind-Value="_model.TipoVialidad.IdTipoVialidad" For="@(() => _model.TipoVialidad.IdTipoVialidad)"
                                        HelperText="Requerido">
                                 <MudSelectItem Value="0" Disabled="true">Tipo Vialidad</MudSelectItem>
                                 @foreach (var vialidad in _listVialidad)

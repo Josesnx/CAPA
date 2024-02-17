@@ -2,6 +2,7 @@
 using Client.Data.Herramienta;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using System.Net.Http.Json;
 
 namespace Client.Pages.Tarifa;
 
@@ -24,13 +25,20 @@ public partial class TarifaList : ComponentBase
     protected List<TarifaViewModel> _tarifa = new();
     private readonly int[] _pageSizeOptions = { 10, 20, 30, 40, 50 };
     private readonly string _infoFormat = "{first_item}-{last_item} de {all_items}";
-    private bool _checkbox;
+    private bool _checkbox = true;
 
     private async Task<TableData<TarifaViewModel>> GetTarifaAsync(TableState tableState)
     {
         try
         {
-            var apiResponse = await Http!.GetFromJsonAsync<ApiResponseViewModel<TarifaViewModel>>(_url + "TARIFA") ?? new();
+            var parametrosPaginacion = new Dictionary<string, object?>
+            {
+                { "Estatus", (short)(_checkbox ? 1 : 0) },
+                { "CurrentPage", tableState.Page + 1 },
+                { "PageSize", tableState.PageSize }
+            };
+
+            var apiResponse = await Http!.GetFromJsonAsync<ApiResponseViewModel<TarifaViewModel>>(Tool.GenerateQueryString(parametrosPaginacion!, _url + "TARIFA")) ?? new();
             _tarifa = apiResponse.Items;
 
             return new TableData<TarifaViewModel>
@@ -51,12 +59,23 @@ public partial class TarifaList : ComponentBase
         };
     }
 
+    private void Inactivos(bool check)
+    {
+        _checkbox = check;
+        _tarifaTable.ReloadServerData();
+    }
+
+    private static bool IsDisabled(int estatus)
+    {
+        return estatus == 0;
+    }
+
     private void NavigateToAddTarifaPage()
     {
         Navigator.NavigateTo("/Tarifa/Add");
     }
 
-    private async void NavigateToEditTarifaPage(TarifaViewModel model)
+    private void NavigateToEditTarifaPage(TarifaViewModel model)
     {
         Navigator.NavigateTo($"/Tarifa/Edit/{model.IdTarifa}");
     }

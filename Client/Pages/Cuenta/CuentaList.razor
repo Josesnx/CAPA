@@ -9,6 +9,10 @@
         <MudIconButton UserAttributes="@(new Dictionary<string, object> {{"id","btnNew"}})" Icon="@Icons.Material.Outlined.AddCircleOutline" Size="Size.Medium"
                        @onclick="NavigateToAddCuentaPage" Color="Color.Primary"></MudIconButton>
         <MudCheckBox @bind-Value="@_checkbox" Color="Color.Warning" CheckedIcon="@Icons.Material.Filled.RemoveRedEye" UncheckedIcon="@Icons.Material.Outlined.RemoveRedEye"></MudCheckBox>
+        <MudSpacer />
+        <MudTextField UserAttributes="@(new Dictionary<string, object> {{"id","txtSearchBox"}})" T="string" ValueChanged="@(OnSearch)" Placeholder="Buscar"
+                      Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search"
+                      IconSize="Size.Medium" Class="mt-0"></MudTextField>
     </ToolBarContent>
     <HeaderContent>
         <MudTh>Nombre</MudTh>
@@ -19,7 +23,7 @@
             <MudTh>Tipo Toma</MudTh>
             <MudTh>Tarifa</MudTh>
         }
-        <MudTh>Expediente/Estado de Cuenta/Recibo</MudTh>
+        <MudTh Style="text-align: center">Expediente/Estado de Cuenta/Recibo</MudTh>
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="Nombre">
