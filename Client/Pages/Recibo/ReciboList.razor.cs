@@ -25,6 +25,7 @@ public partial class ReciboList : ComponentBase
     private const string _url = "https://apex.oracle.com/pls/apex/capa/SFA/";
     private MudTable<ReciboViewModel> _reciboTable = null!;
     protected List<ReciboViewModel> _recibo = new();
+    protected List<Abono> _totalAbono = new();
     private readonly int[] _pageSizeOptions = { 10, 20, 30, 40, 50 };
     private readonly string _infoFormat = "{first_item}-{last_item} de {all_items}";
     private decimal _SumCantidad;
@@ -42,9 +43,11 @@ public partial class ReciboList : ComponentBase
 
             var apiResponse = await Http!.GetFromJsonAsync<ApiResponseViewModel<ReciboViewModel>>(Tool.GenerateQueryString(parametrosPaginacion!, _url + "RECIBO")) ?? new();
             _recibo = apiResponse.Items;
-            foreach (var recibo in _recibo)
+            var apiResponseAbono = await Http!.GetFromJsonAsync<ApiResponseViewModel<Abono>>(Tool.GenerateQueryString(parametrosPaginacion!, _url + "RECIBO_ABONO_TOTAL")) ?? new();
+            _totalAbono = apiResponseAbono.Items;
+            foreach (var abono in _totalAbono)
             {
-                _SumCantidad = _recibo.Sum(r => r.Cantidad);
+                _SumCantidad = abono.AbonoTotal;
             }
 
             return new TableData<ReciboViewModel>

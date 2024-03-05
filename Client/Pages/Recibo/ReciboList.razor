@@ -7,6 +7,7 @@
     <ToolBarContent>
         <MudText Typo="Typo.h6">Recibos</MudText>
         <MudSpacer />
+        <MudText Typo="Typo.subtitle2">Abono Total: $ @_SumCantidad.ToString("N2")</MudText>
         <MudButton Class="ma-2" UserAttributes="@(new Dictionary<string, object> {{"id","btnReturn"}})"
                    Variant="Variant.Filled" @onclick="NavigateToCuentaPage" StartIcon="@Icons.Material.Filled.ArrowBack" Color="Color.Error">Regresar</MudButton>
     </ToolBarContent>
@@ -35,11 +36,4 @@
     <PagerContent>
         <MudTablePager PageSizeOptions="_pageSizeOptions" RowsPerPageString="Resultados por página" InfoFormat="@_infoFormat" />
     </PagerContent>
-    <FooterContent>
-        <MudTd></MudTd>
-        <MudTd></MudTd>
-        <MudTd>
-            Total: $ @_SumCantidad.ToString("N2")
-        </MudTd>
-    </FooterContent>
 </MudTable>

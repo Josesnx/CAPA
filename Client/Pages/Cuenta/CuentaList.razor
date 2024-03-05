@@ -9,6 +9,7 @@
         <MudIconButton UserAttributes="@(new Dictionary<string, object> {{"id","btnNew"}})" Icon="@Icons.Material.Outlined.AddCircleOutline" Size="Size.Medium"
                        @onclick="NavigateToAddCuentaPage" Color="Color.Primary"></MudIconButton>
         <MudCheckBox @bind-Value="@_checkbox" Color="Color.Warning" CheckedIcon="@Icons.Material.Filled.RemoveRedEye" UncheckedIcon="@Icons.Material.Outlined.RemoveRedEye"></MudCheckBox>
+        <MudCheckBox Value="_userInactive" ValueChanged="@((bool v) => Inactivos(v))" Color="Color.Warning" CheckedIcon="@Icons.Material.Filled.DisabledVisible" UncheckedIcon="@Icons.Material.Outlined.DisabledVisible"></MudCheckBox>
         <MudSpacer />
         <MudTextField UserAttributes="@(new Dictionary<string, object> {{"id","txtSearchBox"}})" T="string" ValueChanged="@(OnSearch)" Placeholder="Buscar"
                       Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search"
@@ -17,12 +18,12 @@
     <HeaderContent>
         <MudTh>Nombre</MudTh>
         <MudTh>Total</MudTh>
-        <MudTh>Estatus</MudTh>
         @if (_checkbox)
         {
             <MudTh>Tipo Toma</MudTh>
             <MudTh>Tarifa</MudTh>
         }
+        <MudTh>Estatus</MudTh>
         <MudTh Style="text-align: center">Expediente/Estado de Cuenta/Recibo</MudTh>
     </HeaderContent>
     <RowTemplate>
@@ -31,9 +32,6 @@
         </MudTd>
         <MudTd DataLabel="Total">
             $ @context.Cuenta.Total.ToString("N2")
-        </MudTd>
-        <MudTd DataLabel="Estatus">
-            @context.Cuenta.EstatusString
         </MudTd>
         @if (_checkbox)
         {
@@ -47,6 +45,10 @@
                 <div>Precio: $@context.Cuenta.Tarifa.Precio</div>
             </MudTd>
         }
+        <MudTd DataLabel="Estatus" Style="text-align: center">
+            <MudCheckBox Value="((context.Cuenta.Estatus == 1) ? true : false)" ValueChanged="@((bool v) => CuentaActivoAsync(v, context))" Color="Color.Secondary" CheckedIcon="@Icons.Material.Filled.Person"
+                UncheckedIcon="@Icons.Material.Filled.PersonOff" Label="@context.Cuenta.EstatusString"></MudCheckBox>
+        </MudTd>
         <MudTd DataLabel="Expediente/Cuenta/Recibo" Style="text-align: center">
             <MudIconButton UserAttributes="@(new Dictionary<string, object> {{"id","btnExpediente"}})" Icon="@Icons.Material.Filled.Folder" Color="Color.Error"
                            @onclick="()=> NavigateToExpedientePage(context)" Size="Size.Medium"></MudIconButton>

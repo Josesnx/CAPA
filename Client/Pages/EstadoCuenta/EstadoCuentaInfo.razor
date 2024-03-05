@@ -32,8 +32,8 @@
                                     @bind-Value="_model.Total" For="@(() => _model.Total)" Format="N2" Disabled="!_edit" Min="0"/>
                 <MudSelect T="int" Label="Estatus" AnchorOrigin="Origin.TopCenter" Disabled="!_edit"
                             @bind-Value="_model.EstadoCuenta.Estatus" For="@(() => _model.EstadoCuenta.Estatus)">
-                    <MudSelectItem Value="@(1)">Activo</MudSelectItem>
-                    <MudSelectItem Value="@(0)">Inactivo</MudSelectItem>
+                    <MudSelectItem Value="@(1)">Al Corriente</MudSelectItem>
+                    <MudSelectItem Value="@(0)">Adeudo</MudSelectItem>
                 </MudSelect>
             </MudCardContent>
             @if (_edit)
